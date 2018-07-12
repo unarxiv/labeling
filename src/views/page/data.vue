@@ -1,0 +1,312 @@
+<template>
+    <div>
+        <Card>
+            <p slot="title" style="overflow: visible">
+                <Row>
+                    <Col span="20"><Icon type="ios-keypad"></Icon> 分组管理</Col>
+                    <Col span="4" align="right">
+                    <Button type="ghost" shape="circle" icon="android-add" @click="showAdd">添加分组</Button></Col>
+                </Row>
+            </p>
+            <Row>
+                <Table :columns="columns" :data="data"></Table>
+            </Row>
+            <p style="padding-top:10px; text-align:right">
+                <Page :total="total" :page-size="pageSize"
+                @on-change="pageChange"
+                @on-page-size-change="pageSizeChange"
+                size="small" show-elevator show-sizer show-total></Page>
+            </p>
+        </Card>
+        <Modal v-model="add" :closable='false' :mask-closable=false :width="600">
+            <h3 slot="header" style="color:#2D8CF0">{{addText}}</h3>
+            <Form ref="addForm" :model="form" label-position="right" :rules="formValidate" :label-width="80">
+                <FormItem label="分组名称" prop="groupName">
+                    <Input v-model="form.groupName" placeholder="请输入分组名" style="width:60%"></Input>
+                </FormItem>
+
+                <FormItem label="上传人员" prop="uploadMember">
+                   <Select
+                        v-model="form.uploadMember"
+                        multiple
+                        filterable
+                        remote
+                        placeholder="用户名或者邮箱"
+                        :remote-method="getUserUploadMember"
+                        :loading="loading1"
+                        :label="form.uploadMemberLabel">
+                        <Option v-for="(option) in uploadMember" :value="option.userId" :key="option.userId" :label="option.userName+'('+option.email+')'">{{option.userName}}({{option.email}})</Option>
+                    </Select>
+                </FormItem>
+
+                <FormItem label="标注人员" prop="labelMember">
+                    <Select
+                        v-model="form.labelMember"
+                        multiple
+                        filterable
+                        remote
+                        placeholder="用户名或者邮箱"
+                        :remote-method="getUserLabelMember"
+                        :loading="loading2"
+                        :label="form.labelMemberLabel">
+                        <Option v-for="(option) in labelMember" :value="option.userId" :key="option.userId" :label="option.userName+'('+option.email+')'">{{option.userName}}({{option.email}})</Option>
+                    </Select>
+                </FormItem>
+
+                <FormItem label="审核人员" prop="auditMember">
+                    <Select
+                        v-model="form.auditMember"
+                        multiple
+                        filterable
+                        remote
+                        placeholder="用户名或者邮箱"
+                        :remote-method="getUserAuditMember"
+                        :loading="loading3"
+                        :label="form.auditMemberLabel">
+                        <Option v-for="(option) in auditMember" :value="option.userId" :key="option.userId" :label="option.userName+'('+option.email+')'">{{option.userName}}({{option.email}})</Option>
+                    </Select>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="text" @click="cancelAdd">取消</Button>
+                <Button type="primary" :loading="save_loading" @click="saveAdd">提交</Button>
+            </div>
+        </Modal>
+    </div>
+</template>
+<script>
+import expandRow from './data-detail.vue'
+import util from '../../libs/util'
+export default {
+  components: { expandRow },
+  data () {
+    return {
+      columns: [
+        {
+          type: 'expand',
+          width: 40,
+          render: (h, params) => {
+            return h(expandRow, {
+              props: {
+                row: params.row
+              }
+            })
+          }
+        },
+        {
+          title: '分组',
+          key: 'name'
+        },
+        {
+          title: '创建时间',
+          key: 'createdDate'
+        },
+        {
+          title: '设置',
+          key: 'action',
+          width: 160,
+          render: (h, params) => {
+            const row = params.row
+            let buts = []
+            buts.push(h('Button', {
+              props: {
+                type: 'text',
+                size: 'small'
+              },
+              on: {
+                click: () => {
+                  this.$router.push('/tagging/index')
+                }
+              }
+            }, '查看'))
+            // if (row.status === '1') {
+            buts.push(h('Button', {
+              props: {
+                type: 'text',
+                size: 'small'
+              },
+              on: {
+                click: () => {
+                  this.form = {}
+                  this.form = {
+                    idGroup: row.idGroup,
+                    groupName: row.name,
+                    uploadMember: (row.uploadMemberList || []).map(v => {
+                      return v.userId
+                    }),
+                    labelMember: (row.labelMemberList || []).map(v => {
+                      return v.userId
+                    }),
+                    auditMember: (row.auditMemberList || []).map(v => {
+                      return v.userId
+                    }),
+                    uploadMemberLabel: (row.uploadMemberList || []).map(v => {
+                      return v.userName + '(' + v.email + ')'
+                    }),
+                    labelMemberLabel: (row.labelMemberList || []).map(v => {
+                      return v.userName + '(' + v.email + ')'
+                    }),
+                    auditMemberLabel: (row.auditMemberList || []).map(v => {
+                      return v.userName + '(' + v.email + ')'
+                    })
+                  }
+                  this.uploadMember = row.uploadMemberList
+                  this.labelMember = row.labelMemberList
+                  this.auditMember = row.auditMemberList
+                  this.showEdit()
+                }
+              }
+            }, '编辑'))
+            buts.push(h('Poptip', {
+              props: {
+                confirm: true,
+                title: '您确定要删除这条数据吗?',
+                transfer: true
+              },
+              on: {
+                'on-ok': () => {
+                  this.data.splice(row.index, 1)
+                  // this.$emit('input', vm.handleBackdata(vm.thisTableData));
+                  this.deleteItem(row.idGroup)
+                }
+              }
+            }, [
+              h('Button', {
+                style: {
+                  color: 'red'
+                },
+                props: {
+                  type: 'text',
+                  placement: 'top',
+                  size: 'small'
+                }
+              }, '删除')
+            ]))
+            // }
+
+            return h('div', buts)
+          }
+        }
+      ],
+      data: [],
+      add: false,
+      addText: '创建分组',
+      formValidate: {
+        groupName: [
+          { required: true, message: '分组名不能为空', trigger: 'blur' }
+        ]
+      },
+      save_loading: false,
+      total: 0,
+      pageSize: 10,
+      page: 1,
+      loading1: false,
+      loading2: false,
+      loading3: false,
+      form: {
+        groupName: '',
+        uploadMember: [],
+        labelMember: [],
+        auditMember: []
+      },
+      uploadMember: [],
+      labelMember: [],
+      auditMember: []
+    }
+  },
+  methods: {
+    showAdd () {
+      this.add = true
+      this.addText = '创建分组'
+      this.form = {
+        groupName: '',
+        uploadMember: [],
+        labelMember: [],
+        auditMember: []
+      }
+    },
+    showEdit () {
+      this.add = true
+      this.addText = '编辑分组'
+    },
+    saveAdd () {
+      this.save_loading = true
+      this.$refs.addForm.validate((valid) => {
+        if (valid) {
+          util.ajax.post(this.addText === '编辑分组' ? '/userGroup/update.do' : '/userGroup/save.do', this.form).then(res => {
+            if (!res.data.status) {
+              this.$Message.error(res.data.errormsg)
+            } else {
+              this.$Message.success('保存成功！')
+              this.add = false
+              this.getData()
+            }
+            this.save_loading = false
+          })
+        }
+      })
+    },
+    cancelAdd () {
+      this.add = false
+    },
+    getData () {
+      let qs = require('qs')
+      util.ajax.post('/userGroup/selectGroupList.do', qs.stringify({
+        pageIndex: this.page,
+        pageSize: this.pageSize
+      })).then(res => {
+        if (!res.data.status) {
+          this.$Message.error(res.data.errormsg)
+        } else {
+          let data = res.data.data
+          this.data = data.list
+          this.total = data.fullListSize
+        }
+      })
+    },
+    pageChange (page) {
+      this.page = page
+      this.getData()
+    },
+    pageSizeChange (size) {
+      this.pageSize = size
+      this.page = 1
+      this.getData()
+    },
+    getUserUploadMember (query) {
+      this.loading1 = true
+      if (query.length > 0) { this.getUser(query, 'uploadMember') }
+    },
+    getUserLabelMember (query) {
+      this.loading2 = true
+      if (query.length > 0) { this.getUser(query, 'labelMember') }
+    },
+    getUserAuditMember (query) {
+      this.loading3 = true
+      if (query.length > 0) { this.getUser(query, 'auditMember') }
+    },
+    getUser (query, type) {
+      util.ajax.post('/userGroup/userNameIsExist.do', 'name=' + query).then(res => {
+        if (res.data.status) {
+          this[type] = res.data.data
+        }
+        this.loading1 = false
+        this.loading2 = false
+        this.loading3 = false
+      })
+    },
+    deleteItem (idGroup) {
+      util.ajax.post('/userGroup/delete.do', 'idGroup=' + idGroup).then(res => {
+        if (!res.data.status) {
+          this.$Message.error(res.data.errormsg)
+        } else {
+          this.$Message.success('已经删除')
+        }
+      })
+    }
+  },
+  created () {
+    this.getData()
+  }
+}
+</script>

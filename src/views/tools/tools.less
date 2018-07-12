@@ -1,0 +1,131 @@
+.layout{
+    background: #FFFFFF;
+    position: relative;
+    overflow: hidden;
+
+    .ivu-layout-header {
+        background: #FFFFFF;
+        padding: 20px 30px 0;
+        height: 66px;
+
+        .toolbar{
+            position: relative;
+            height: 100%;
+            width: auto;
+            font-size: 0;
+            line-height: 1;
+
+            button{
+                background-color: #313343;
+                width: 56px;
+                height: 50px;
+                border: 0;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: auto 40%;
+            }
+            button.active{
+                background-color: #1798A4;
+            }
+            button:hover{
+                background-color: #53565C;
+            }
+            button:disabled{
+                opacity: .3;
+            }
+            button[active]:hover{
+                background-color: #1798A4;
+            }
+            button[disabled]:hover{
+                background-color: #313343;
+            }
+
+            button.pre{
+                background-image: url(../../assets/images/tool/pre.png)
+            }
+            button.next{
+                background-image: url(../../assets/images/tool/next.png)
+            }
+            button.enlarge{
+                background-image: url(../../assets/images/tool/enlarge.png)
+            }
+            button.narrow{
+                background-image: url(../../assets/images/tool/narrow.png)
+            }
+            button.appropriate{
+                background-image: url(../../assets/images/tool/appropriate.png)
+            }
+            button.rect{
+                background-image: url(../../assets/images/tool/rect.png)
+            }
+            button.polygon{
+                background-image: url(../../assets/images/tool/polygon.png)
+            }
+            button.line{
+                background-image: url(../../assets/images/tool/line.png)
+            }
+            button.redo{
+                background-image: url(../../assets/images/tool/redo.png)
+            }
+            button.undo{
+                background-image: url(../../assets/images/tool/undo.png)
+            }
+            
+        }
+    }
+    .layout-content{
+        background: #FFFFFF;
+        padding: 0 30px;
+    }
+}
+
+.l-section{
+    width:100%;
+    height:100%;
+    position: absolute;
+    transform-origin:0 0;
+    cursor:crosshair;
+    svg{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+    .svg-item:hover{ 
+        fill: #FB4F41;stroke:#FB4F41;stroke-width:4;fill-opacity:0.5;stroke-opacity:0.9
+    }
+    canvas{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+}
+.tag-box{
+    height: 100%;
+    overflow: auto;
+    position: absolute;
+    width: 100%;
+    
+    .tag-title{
+        text-align: center;
+        font-size: 14px;
+        line-height: 2em;
+    }
+    .tag-ol{
+        padding-left: 3em;
+        padding-right: .5em;
+
+        &>li.active{
+            background: #1798A4;
+            color: #000000;
+        }
+    }
+    .tag-item{
+        height: 22px;
+        line-height: 22px;
+        border-bottom: 1px solid #e9eaec;
+        font-size: 12px;
+        opacity: 1;
+        cursor: pointer;
+        list-style-type: decimal;
+    }
+}
