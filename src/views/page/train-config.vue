@@ -5,15 +5,20 @@
         <Select @on-change="selectType" style="width:100px" v-model="type">
           <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
+        <span>选择模型:</span>
+        <Select @on-change="selectType" style="width:200px" v-model="type">
+          <Option v-for="item in models" :value="item.name" :key="item.id">{{ item.name }}</Option>
+        </Select>
       </div>
       <Form ref="configForm" label-position="right" :label-width="160">
           <FormItem :label="v.key" v-for="(v,k) in configList" :key="k" v-if="v.key!='multi_grid'">
-              <Input v-model="config[v.key]"></Input>
+              <Input v-model="config[v.key]"/>
           </FormItem>
       </Form>
     </div>
 </template>
 <script>
+import axios from 'axios'
 import util from '../../libs/util'
 export default {
   name: 'trainConfig',
@@ -30,6 +35,7 @@ export default {
       config: null,
       configList: [],
       save_loading: false,
+      models: [],
       typeList: [
         {
           value: 'detector',
@@ -47,7 +53,22 @@ export default {
       type: 'detector'
     }
   },
+  watch: {
+    type (newVal) {
+      this.getModels()
+    }
+  },
   methods: {
+    getModels () {
+      let self = this
+      axios.get('http://118.89.28.34:9090/static/models.json').then(res => {
+        self.models = res.data.filter(function (each) {
+          if (each.task === self.type) {
+            return each
+          }
+        })
+      })
+    },
     getConfig () {
       util.ajax.get('/train/getTrainConfig.do?trainType=' + this.type).then(res => {
         if (!res.data.status) {
@@ -75,6 +96,7 @@ export default {
     }
   },
   created () {
+    this.getModels()
     this.getConfig()
   }
 }
