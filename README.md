@@ -1,6 +1,8 @@
-# ragging2.0
+# Labeling
 
-> tagging
+[![Coverage Status](https://coveralls.io/repos/github/unarxiv/labeling/badge.svg?branch=master)](https://coveralls.io/github/unarxiv/labeling?branch=master)
+[![Build Status](https://travis-ci.org/unarxiv/labeling.svg?branch=master)](https://travis-ci.org/unarxiv/labeling)
+> Labeling Toolkit for CVTron
 
 ## Build Setup
 
