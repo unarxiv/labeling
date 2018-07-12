@@ -1,11 +1,13 @@
 import Vue from 'vue'
-import HelloWorld from '@/components/HelloWorld'
+import iView from 'iview'
+Vue.use(iView)
+import topmenu from '@/views/main/topmenu.vue'
 
-describe('HelloWorld.vue', () => {
+describe('topmenu.vue', () => {
   it('should render correct contents', () => {
-    const Constructor = Vue.extend(HelloWorld)
+    const Constructor = Vue.extend(topmenu)
     const vm = new Constructor().$mount()
-    expect(vm.$el.querySelector('.hello h1').textContent)
-      .toEqual('Welcome to Your Vue.js App')
+    expect(vm.$el.querySelector('.top-menu-title').textContent)
+      .toEqual('产品服务')
   })
 })
