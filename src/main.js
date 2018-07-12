@@ -1,9 +1,8 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import 'iview/dist/styles/iview.css' // 导入iview样式
+import 'iview/dist/styles/iview.css' 
 import iView from 'iview'
 import App from './App'
+import i18n from '@/i18n'
 import {router} from './router'
 import 'babel-polyfill'
 import ElementDataset from 'element-dataset'
@@ -18,6 +17,7 @@ Vue.use(iView)
 new Vue({
   el: '#app',
   router,
+  i18n,
   components: { App },
   template: '<App/>'
 })
