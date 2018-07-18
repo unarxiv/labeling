@@ -23,12 +23,17 @@
                 </Row>
               </div>
             </div>
+          <div>
+            <h4>Request Address</h4>
+            <pre>{{ inferenceEndpoint }}</pre>
+            <p><a href="https://docs.cvtron.xyz/zh/guide/serve-reference/">How to use?</a></p>
+          </div>
         </Card>
     </div>
 </template>
 <script>
 import util from '../../libs/util'
-import { detect } from '@/libs/service'
+import { detect, getInferenceEndpoint } from '@/libs/service'
 export default {
   components: {
   },
@@ -40,7 +45,8 @@ export default {
       },
       loading: false,
       flag: false,
-      result: []
+      result: [],
+      inferenceEndpoint: ''
     }
   },
   methods: {
@@ -117,6 +123,7 @@ export default {
     this.id = this.$route.params.id
     this.groupName = this.$route.query.groupName
     this.taskName = this.$route.query.taskName
+    this.inferenceEndpoint = getInferenceEndpoint(this.$route.query.modelId)
   }
 }
 </script>

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-let host = 'http://118.89.28.34:9090/'
+let host = 'http://134.175.1.246/'
 
 function _inferenceCall (endpoint, image) {
   return new Promise((resolve, reject) => {
@@ -36,8 +36,13 @@ function getLog (logfilename) {
   return _getRequest(host + 'static/' + logfilename + '/log.json')
 }
 
+function getInferenceEndpoint (modelName) {
+  return host + 'detector/detect?model_name=' + modelName
+}
+
 export {
   detect,
   getLog,
-  getModelFile
+  getModelFile,
+  getInferenceEndpoint
 }
