@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-let host = 'http://127.0.0.1:9090/'
+let host = 'http://118.89.28.34:9090/'
 
 function _inferenceCall (endpoint, image) {
   return new Promise((resolve, reject) => {
