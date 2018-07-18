@@ -283,6 +283,7 @@ export default {
             this.$Message.error(res.data.errormsg)
           } else {
             let data = res.data.data
+            console.log(data)
             this.$router.push({
               name: 'trainlog',
               params: {
@@ -290,7 +291,8 @@ export default {
               },
               query: {
                 groupName: this.groupName,
-                taskName: this.taskName
+                taskName: this.taskName,
+                modelId: data.log_file_name
               }
             })
           }

@@ -20,9 +20,10 @@
               <Panel name="2">
                   Full Log
                   <div slot="content">
+                    <Button type="ghost" shape="circle" icon="loop" @click="refreshLog()"></Button>
                      <Tabs :animated="false" @on-click="tabChange">
-                        <TabPane label="PLAIN" name="PLAIN">{{data}}</TabPane>
-                        <TabPane label="TABLE" name="TABLE"><Table :columns="columns" :data="data"></Table></TabPane>
+                        <TabPane label="PLAIN" name="PLAIN">{{ trainLog }}</TabPane>
+                        <TabPane label="TABLE" name="TABLE"><Table :columns="tableHeaders" :data="trainLog"></Table></TabPane>
                         <TabPane label="CHART" name="CHART">
                           <Row>
                             <Col span="8">
@@ -45,7 +46,8 @@
               <Panel name="3">
                   Download
                   <div slot="content">
-
+                    <Button type="ghost" icon="loop" @click="request_model()">Request</Button>
+                    <a :href=download_url>Download Now</a>
                   </div>
               </Panel>
           </Collapse>
@@ -56,6 +58,7 @@
 import expandRow from './data-detail.vue'
 import util from '../../libs/util'
 import lineChart from '../../components/lineChart'
+import { getLog, getModelFile } from '@/libs/service'
 export default {
   components: {
     expandRow,
@@ -65,6 +68,7 @@ export default {
     return {
       plane: '',
       config: null,
+      download_url: '',
       configList: [],
       columns: [
         {
@@ -84,27 +88,38 @@ export default {
           key: 'global_step'
         }
       ],
-      data: [
-
-      ],
+      trainLog: [],
       chartData: [],
       chartKey: ''
     }
   },
   computed: {
     headers () {
-      if (this.data[0]) {
-        let keys = Object.keys(this.data[0])
+      if (this.trainLog[0]) {
+        let keys = Object.keys(this.trainLog[0])
         let heads = []
         for (let i in keys) {
-          heads.push(
-            {
-              text: keys[i],
-              value: keys[i],
-              align: 'right',
-              sortable: true
-            }
-          )
+          heads.push({
+            text: keys[i],
+            value: keys[i],
+            align: 'right',
+            sortable: true
+          })
+        }
+        return heads
+      }
+    },
+    tableHeaders () {
+      if (this.trainLog[0]) {
+        let keys = Object.keys(this.trainLog[0])
+        let heads = []
+        for (let i in keys) {
+          heads.push({
+            title: keys[i],
+            key: keys[i],
+            align: 'right',
+            sortable: true
+          })
         }
         return heads
       }
@@ -134,8 +149,8 @@ export default {
     },
     fillData (name) {
       let data = []
-      for (let i in this.data) {
-        data.push(this.data[i][name])
+      for (let i in this.trainLog) {
+        data.push(this.trainLog[i][name])
       }
       this.chartData = {
         datasets: [
@@ -162,7 +177,11 @@ export default {
         this.changeChartData(this.headers[0].text)
       }
     },
+    refreshLog () {
+      this.getData()
+    },
     getData () {
+      /*
       util.ajax.get('/train/getTrainLog.do?idTrainInfo=' + this.id).then(res => {
         if (!res.data.status) {
           this.$Message.error(res.data.errormsg)
@@ -174,6 +193,18 @@ export default {
           this.setConfigList()
         }
       })
+      */
+      let self = this
+      getLog(this.$route.query.modelId).then(function (res) {
+        self.trainLog = res.data
+        console.log(self.trainLog)
+      })
+      //  getModelFile(this.$route.query.modelId).then(function (res) {
+      //    self.download_url = res.data.url
+      //  })
+    },
+    request_model () {
+
     }
   },
   created () {
@@ -187,8 +218,8 @@ export default {
 }
 </script>
 <style lang="less">
-.config-list{
-  border-bottom: 1px dotted rgba(0,0,0,.05);
+.config-list {
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.05);
   line-height: 2em;
 }
 </style>

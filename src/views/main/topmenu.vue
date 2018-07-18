@@ -1,6 +1,8 @@
 <template>
     <div class="layout-nav">
-        <div class="layout-logo" @click="go('/')"></div>
+        <div class="layout-logo" @click="go('/')">
+            <img class="layout-logo-img" src="@/assets/images/logo.png"/>
+        </div>
         <Menu mode="horizontal" theme="dark" active-name="1">
             <menu-item name="1-1">
                 <span class="top-menu-title">产品服务</span>
@@ -78,12 +80,11 @@ export default {
 }
 .layout-logo{
     width: 100px;
-    height: 30px;
-    background: #5b6270;
+    height: 45px;
     border-radius: 3px;
     float: left;
     position: relative;
-    top: 15px;
+    top: 10px;
     left: 20px;
     margin-right: 90px;
 }
@@ -98,5 +99,9 @@ export default {
         line-height: 60px;
     }
 }
-
+.layout-logo-img {
+    width: 45px;
+    margin-top:auto;
+    margin-bottom:auto;
+}
 </style>

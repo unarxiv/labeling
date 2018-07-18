@@ -56,7 +56,8 @@ export default {
                     path: '/trainlog/' + row.idTrainInfo,
                     query: {
                       groupName: this.groupName,
-                      taskName: this.taskName
+                      taskName: this.taskName,
+                      modelId: row.logFileName
                     }
                   })
                 }
