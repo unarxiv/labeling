@@ -15,12 +15,12 @@
                 >
                     <FormItem label="用户名：" prop="userName">
                         <div style="display:inline-block;width:300px;">
-                            <Input v-model="userForm.userName" disabled />
+                            <Input v-model="userForm.userName" disabled></Input>
                         </div>
                     </FormItem>
                     <FormItem label="邮箱：" prop="email">
                         <div style="display:inline-block;width:300px;">
-                            <Input v-model="userForm.email" />
+                            <Input v-model="userForm.email" ></Input>
                         </div>
                     </FormItem>
                     <FormItem label="登录密码：">
@@ -37,13 +37,13 @@
             <h3 slot="header" style="color:#2D8CF0">修改密码</h3>
             <Form ref="editPasswordForm" :model="editPasswordForm" :label-width="100" label-position="right" :rules="passwordValidate">
                 <FormItem label="原密码" prop="oldPass" :error="oldPassError">
-                    <Input v-model="editPasswordForm.oldPass" type="password" placeholder="请输入现在使用的密码" />
+                    <Input v-model="editPasswordForm.oldPass" type="password" placeholder="请输入现在使用的密码" ></Input>
                 </FormItem>
                 <FormItem label="新密码" prop="newPass">
-                    <Input v-model="editPasswordForm.newPass" type="password" placeholder="请输入新密码，至少6位字符" />
+                    <Input v-model="editPasswordForm.newPass" type="password" placeholder="请输入新密码，至少6位字符" ></Input>
                 </FormItem>
                 <FormItem label="确认新密码" prop="rePass">
-                    <Input v-model="editPasswordForm.rePass" type="password" placeholder="请再次输入新密码" />
+                    <Input v-model="editPasswordForm.rePass" type="password" placeholder="请再次输入新密码" ></Input>
                 </FormItem>
             </Form>
             <div slot="footer">

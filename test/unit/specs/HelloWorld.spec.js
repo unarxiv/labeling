@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import iView from 'iview'
-Vue.use(iView)
 import topmenu from '@/views/main/topmenu.vue'
+Vue.use(iView)
 
 describe('topmenu.vue', () => {
   it('should render correct contents', () => {

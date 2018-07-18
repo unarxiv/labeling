@@ -36,10 +36,12 @@ export default {
   methods: {
     send () {
       let config = this.$refs.trainConfig.config
+      let type = this.$refs.trainConfig.type
       this.save_loading = true
       util.ajax.post('/train/reStartTrain.do', {
         config: config,
-        idTrainInfo: this.id
+        idTrainInfo: this.id,
+        trainType: type
       }).then(res => {
         this.save_loading = false
         if (!res.data.status) {

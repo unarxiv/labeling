@@ -8,7 +8,7 @@
             <Row>
                 <Col span="20"><Icon type="ios-keypad"></Icon> 标记{{fileName}}</Col>
                 <Col span="4" align="right">
-                  <Button type="primary" shape="circle" icon="android-add" @click="changeType(2)">提交审批</Button>
+                  <Button type="primary" shape="circle" icon="android-add" @click="changeType(2)" v-if="listType==='tagging'">提交审批</Button>
                 </Col>
             </Row>
             </p>
@@ -61,8 +61,11 @@
         </Header> -->
         <Header>
           <div class="toolbar">
-            <Tooltip content="后退" placement="bottom">
-              <button class="pre" @click="backPage"></button>
+            <Tooltip content="上一张" placement="bottom">
+              <button class="pre" @click="goPage(-1)"></button>
+            </Tooltip>
+            <Tooltip content="后一张" placement="bottom">
+              <button class="next" @click="goPage(1)"></button>
             </Tooltip>
             <Tooltip content="放大" placement="bottom">
               <button class="enlarge" @click="setScale(1)"></button>
@@ -96,17 +99,25 @@
         <Layout class="layout-content" ref="layoutcontent">
             <Content style="position:relative" ref="content" :style="{background: '#f5f7f9'}">
               <Spin size="large" v-show="loadingImage"></Spin>
-                <section class="l-section" ref="section" @mousemove="drawMove($event)" @mousedown="drawStart($event)" @mouseup="drawEnd($event)" @mouseout="drawOut($event)">
-                    <canvas ref="img_canvas" width="100%" height="100%"/>
-                    <svg ref="draw_canvas" width="100%" height="100%"/>
-                    <svg ref="list_canvas" width="100%" height="100%"/>
-                </section>
+              <section v-show="!loadingImage" class="l-section" ref="section" @mousemove="drawMove($event)" @mousedown="drawStart($event)" @mouseup="drawEnd($event)" @mouseout="drawOut($event)">
+                <canvas ref="img_canvas" width="100%" height="100%"/>
+                <svg ref="draw_canvas" width="100%" height="100%"/>
+                <svg ref="list_canvas" width="100%" height="100%"/>
+              </section>
             </Content>
             <Sider :style="{background: '#f5f7f9'}" >
               <div class="tag-box">
-                <div class="tag-title">标注信息</div>
+                <div class="tag-title">当前标注信息</div>
                 <ol class="tag-ol">
                   <li class="tag-item" v-for="(v,i) in vectorgraph" :key="i" @click="selectNode(i)" :class="{active: hoverIndex===v.idLabelInfo}" @mouseover="tagItemOver($event,v)" @mouseout="tagItemOut($event,v)">
+                      {{v.name}}
+                  </li>
+                </ol>
+              </div>
+              <div class="tag-box">
+                <div class="tag-title">其他标注信息</div>
+                <ol class="tag-ol">
+                  <li class="tag-item" v-for="(v,i) in vectorgraphHis" :key="i" @click="setDefault(i)" :class="{active: v.checked}">
                       {{v.name}}
                   </li>
                 </ol>
@@ -172,6 +183,16 @@ export default {
       vectorgraph: [
 
       ],
+      vectorgraphHis: [
+        {
+          name: '人',
+          desc: '人物介绍'
+        },
+        {
+          name: '狗狗',
+          desc: '狗狗介绍'
+        }
+      ],
       start: true,
       end: false,
       sectionWidth: 0,
@@ -199,6 +220,8 @@ export default {
         ]
       },
       page: 0,
+      pageSize: 10,
+      idTaskInfo: 0,
       pointsBack: [],
       id: 0,
       fileSrc: '',
@@ -206,7 +229,9 @@ export default {
       fileName: '',
       hoverIndex: '',
       loadingImage: false,
-      remoteList: []
+      remoteList: [],
+      listType: '',
+      dataList: []
     }
   },
   methods: {
@@ -493,8 +518,13 @@ export default {
         this.formItem.name = f[0].name
         this.formItem.desc = f[0].desc
       } else {
-        this.formItem.name = ''
-        this.formItem.desc = ''
+        let checks = this.vectorgraphHis.filter((v, k) => {
+          return v.checked
+        })
+        if (checks.length > 0) {
+          this.formItem.name = checks[0].name
+          this.formItem.desc = checks[0].desc
+        }
       }
       let modal = document.querySelector('.attr-box .ivu-modal')
       let points = Draw.getFirstPoint(vector)
@@ -506,14 +536,14 @@ export default {
         setTimeout(() => {
           modal.classList.remove('top-arrow')
           modal.classList.add('bottom-arrow')
-        }, 0)
+        }, 100)
       } else {
         points.y = points.y + 10 + xy.y
         points.x = points.x - 26 > 0 ? points.x - 26 : 0
         setTimeout(() => {
           modal.classList.remove('bottom-arrow')
           modal.classList.add('top-arrow')
-        }, 0)
+        }, 100)
       }
       modal.style.left = (points.x + xy.x) + 'px'
       modal.style.top = points.y + 'px'
@@ -639,6 +669,7 @@ export default {
         } else {
           this.$Message.success('已保存')
           this.vectorgraph[this.vectorgraph.length - 1].idLabelInfo = res.data.data.idLabelInfo
+          this.addHisData(this.vectorgraph[this.vectorgraph.length - 1])
         }
       })
     },
@@ -723,11 +754,116 @@ export default {
           this.remoteList = []
         }
       }
+    },
+    setDefault (i) {
+      let _item = this.vectorgraphHis[i]
+      this.vectorgraphHis.forEach((v, k) => {
+        if (i !== k) {
+          v.checked = false
+        }
+      })
+      _item.checked = !_item.checked
+      this.$forceUpdate()
+    },
+    getDataList (load) {
+      let qs = require('qs')
+      let url = ''
+      if (this.listType === 'tagging') {
+        url = '/sign/queryUploadFileList.do'
+      } else if (this.listType === 'auditing') {
+        url = '/sign/queryFileList.do'
+      } else {
+        url = '/sign/queryTrainFileList.do'
+      }
+      util.ajax.post(url, qs.stringify({
+        pageIndex: this.page,
+        pageSize: this.pageSize,
+        idTaskInfo: this.idTaskInfo,
+        state: this.state
+      })).then(res => {
+        if (!res.data.status) {
+          if (load === 'pre') {
+            this.$Message.warning('已经到了第一张')
+            this.page = this.page + (load === 'pre' ? 1 : -1)
+          } else {
+            this.$Message.error(res.data.errormsg)
+          }
+        } else {
+          let data = res.data.data
+          if (load) {
+            if (data.list.length > 0) {
+              this.id = data.list[0].idSignInfo
+              this.dataList = data.list
+              this.getData()
+            } else {
+              this.$Message.warning('已经是最后一张了')
+              this.page = this.page + (load === 'pre' ? 1 : -1)
+            }
+          } else {
+            this.dataList = data.list
+          }
+        }
+      })
+    },
+    goPage (t) {
+      let inx = 0
+      let id = this.id
+      this.dataList.forEach((v, k) => {
+        if (v.idSignInfo === id) {
+          inx = k
+        }
+      })
+      if (t > 0) {
+        inx = inx + 1
+      } else {
+        inx = inx - 1
+      }
+      if (inx < 0) {
+        this.page = this.page - 1
+        console.log('pre', this.page)
+        this.getDataList('pre')
+      } else if (inx >= this.dataList.length) {
+        this.page = this.page + 1
+        console.log('next', this.page)
+        this.getDataList('next')
+      } else {
+        this.id = this.dataList[inx].idSignInfo
+        this.getData()
+      }
+    },
+    getTaged () {
+      util.ajax.get('/sign/queryHisSignLabel.do?idTaskInfo=' + this.idTaskInfo).then(res => {
+        let resp = res.data
+        if (resp.status) {
+          resp.data.map((v) => {
+            v.name = v.labelName
+            v.desc = v.labelRemark
+          })
+          this.vectorgraphHis = resp.data
+        }
+      })
+    },
+    addHisData (info) {
+      let f = this.vectorgraphHis.filter((v) => {
+        return v.name === info.name && v.desc === info.desc
+      })
+      if (f.length === 0) {
+        this.vectorgraphHis.push({
+          name: info.name,
+          desc: info.desc
+        })
+      }
     }
   },
   created () {
     this.id = this.$route.params.id
+    this.listType = this.$route.params.type
+    this.page = Number(this.$route.query.page)
+    this.pageSize = this.$route.query.pageSize
+    this.idTaskInfo = this.$route.query.idTaskInfo
     this.getData()
+    this.getDataList()
+    this.getTaged()
     window.addEventListener('resize', this.resize, false)
     document.addEventListener('resize', this.resize, false)
   },
@@ -778,6 +914,7 @@ export default {
         line-height:1em;
     }
     .toolbar{
+      background-color: #313343;
       .ivu-tooltip-rel{
           vertical-align: middle;
           height: 50px;

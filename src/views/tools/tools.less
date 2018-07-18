@@ -100,9 +100,9 @@
     }
 }
 .tag-box{
-    height: 100%;
-    overflow: auto;
-    position: absolute;
+    height: 50%;
+    overflow: hidden;
+    position: relative;
     width: 100%;
     
     .tag-title{
@@ -113,6 +113,12 @@
     .tag-ol{
         padding-left: 3em;
         padding-right: .5em;
+        overflow: auto;
+        position: absolute;
+        top: 2em;
+        right: 0;
+        left: 0;
+        bottom: 0;
 
         &>li.active{
             background: #1798A4;

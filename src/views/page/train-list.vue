@@ -80,6 +80,23 @@ export default {
               }
             }, '重新提交'))
 
+            buts.push(h('Button', {
+              props: {
+                size: 'small'
+              },
+              on: {
+                click: () => {
+                  this.$router.push({
+                    path: '/trainTest/' + row.idTrainInfo,
+                    query: {
+                      groupName: this.groupName,
+                      taskName: this.taskName
+                    }
+                  })
+                }
+              }
+            }, '测试'))
+
             return h('div', buts)
           }
         }

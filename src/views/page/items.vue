@@ -163,7 +163,14 @@ export default {
   },
   methods: {
     go (item) {
-      this.$router.push('/tools/' + item.idSignInfo)
+      this.$router.push({
+        path: '/tools/' + this.type + '/' + item.idSignInfo,
+        query: {
+          page: this.page,
+          pageSize: this.pageSize,
+          idTaskInfo: this.id
+        }
+      })
     },
     addImage () {
       this.add = true
@@ -265,9 +272,11 @@ export default {
       this.save_loading = true
       if (list.length > 0) {
         let config = this.$refs.trainConfig.config
+        let type = this.$refs.trainConfig.type
         util.ajax.post('/train/startTrain.do', {
           config: config,
-          signInfoIds: list
+          signInfoIds: list,
+          trainType: type
         }).then(res => {
           this.save_loading = false
           if (!res.data.status) {

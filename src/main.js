@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import 'iview/dist/styles/iview.css' 
+import 'iview/dist/styles/iview.css'
 import iView from 'iview'
 import App from './App'
 import i18n from '@/i18n'

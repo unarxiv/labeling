@@ -14,7 +14,7 @@ export const otherRouter = {
     { path: 'index', title: '控制台', name: 'home', component: () => import('@/views/page/home') },
     { path: 'item/:type/:id', title: '项目', name: 'item-info', component: () => import('@/views/page/items') },
     {
-      path: '/tools/:id',
+      path: '/tools/:type/:id',
       title: '标注工具',
       name: 'tools',
       parent: 'tagging',
@@ -25,6 +25,12 @@ export const otherRouter = {
       title: '提交训练',
       name: 'train',
       component: () => import('@/views/page/train-send')
+    },
+    {
+      path: '/trainTest/:id',
+      title: '提交训练',
+      name: 'trainTest',
+      component: () => import('@/views/page/train-test')
     },
     {
       path: '/trainlog/:id',
