@@ -90,7 +90,8 @@ export default {
                     path: '/trainTest/' + row.idTrainInfo,
                     query: {
                       groupName: this.groupName,
-                      taskName: this.taskName
+                      taskName: this.taskName,
+                      modelId: row.logFileName
                     }
                   })
                 }
@@ -117,6 +118,7 @@ export default {
         pageSize: this.pageSize,
         idTaskInfo: this.id
       })).then((res) => {
+        console.log(res)
         if (!res.data.status) {
           this.$Message.error(res.data.errormsg)
         } else {

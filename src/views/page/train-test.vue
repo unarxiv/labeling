@@ -46,7 +46,7 @@ export default {
   methods: {
     upBefore (file) {
       let self = this
-      detect('b79cc2ba', file).then(function (res) {
+      detect(self.$route.query.modelId, file).then(function (res) {
         self.result = res.data
         self.labelTarget()
       })
