@@ -47,7 +47,7 @@
                   Download
                   <div slot="content">
                     <Button type="ghost" icon="loop" @click="request_model()">Request</Button>
-                    <a :href=download_url>Download Now</a>
+                    <a v-if="isModelAvailable" :href=download_url>Download Now</a>
                   </div>
               </Panel>
           </Collapse>
@@ -90,7 +90,8 @@ export default {
       ],
       trainLog: [],
       chartData: [],
-      chartKey: ''
+      chartKey: '',
+      isModelAvailable: false
     }
   },
   computed: {
@@ -199,12 +200,13 @@ export default {
         self.trainLog = res.data
         console.log(self.trainLog)
       })
-      //  getModelFile(this.$route.query.modelId).then(function (res) {
-      //    self.download_url = res.data.url
-      //  })
     },
     request_model () {
-
+      let self = this
+      getModelFile(this.$route.query.modelId).then(function (res) {
+        self.download_url = res.data.url
+        self.isModelAvailable = true
+      })
     }
   },
   created () {
