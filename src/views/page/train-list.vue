@@ -113,17 +113,18 @@ export default {
   },
   methods: {
     getData () {
+      let self = this
       let qs = require('qs')
       util.ajax.get('/train/getTrainList.do?' + qs.stringify({
         pageIndex: this.page,
         pageSize: this.pageSize,
         idTaskInfo: this.id
       })).then((res) => {
-        console.log(res)
         if (!res.data.status) {
-          this.$Message.error(res.data.errormsg)
+          self.$Message.error(res.data.errormsg)
         } else {
-          this.data = res.data.data
+          self.data = res.data.data.list
+          console.log(self.data)
         }
       })
     },
