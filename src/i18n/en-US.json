@@ -7,7 +7,16 @@
         },
         "appearence": {
             "title": "Appearence"
-        }
+        },
+        "userForm": {
+            "username": "Username",
+            "password": "Password",
+            "email": "Email",
+            "language": "Language",
+            "login_password": "Password"
+        },
+        "personal_information": "Personal Information",
+        "change_password": "Change Password"
     },
     "menus": {
         "home": "Home",
@@ -23,5 +32,8 @@
             "log": "Full Log",
             "config": "Config"
         }
+    },
+    "general": {
+        "save" : "Save"
     }
 }

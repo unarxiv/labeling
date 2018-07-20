@@ -7,7 +7,15 @@
         },
         "appearence": {
             "title": "外观"
-        }
+        },
+        "userForm": {
+            "username": "用户名",
+            "password": "密码",
+            "email": "邮箱",
+            "language": "语言"
+        },
+        "personal_information": "个人信息",
+        "change_password": "修改密码"
     },
     "menus": {
         "home": "主页",

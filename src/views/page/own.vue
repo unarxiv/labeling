@@ -3,7 +3,7 @@
         <Card>
             <p slot="title">
                 <Icon type="person"></Icon>
-                个人信息
+                {{ $t("settings.personal_information") }}
             </p>
             <div>
                 <Form
@@ -13,28 +13,35 @@
                     label-position="right"
                     :rules="inforValidate"
                 >
-                    <FormItem label="用户名：" prop="userName">
+                    <FormItem :label="$t('settings.userForm.username')" prop="userName">
                         <div style="display:inline-block;width:300px;">
-                            <Input v-model="userForm.userName" disabled></Input>
+                            <Input v-model="userForm.userName" disabled />
                         </div>
                     </FormItem>
-                    <FormItem label="邮箱：" prop="email">
+                    <FormItem :label="$t('settings.userForm.email')" prop="email">
                         <div style="display:inline-block;width:300px;">
-                            <Input v-model="userForm.email" ></Input>
+                            <Input v-model="userForm.email" />
                         </div>
                     </FormItem>
-                    <FormItem label="登录密码：">
-                        <Button type="text" size="small" @click="showEditPassword">修改密码</Button>
+                    <FormItem :label="$t('settings.userForm.language')" prop="language">
+                        <div style="display:inline-block;width:300px;">
+                          <Select v-model="selected_language" style="width:300px">
+                              <Option v-for="item in languages" :value="item" :key="item">{{ item }}</Option>
+                          </Select>
+                        </div>
+                    </FormItem>
+                    <FormItem :label="$t('settings.userForm.password')">
+                        <Button type="text" size="small" @click="showEditPassword">{{ $t("settings.change_password") }}</Button>
                     </FormItem>
                     <div>
                         <!-- <Button type="text" style="width: 100px;" @click="cancelEditUserInfor">注销帐号</Button> -->
-                        <Button type="primary" style="width: 100px;" :loading="save_loading" @click="saveEdit">保存</Button>
+                        <Button type="primary" style="width: 100px;" :loading="save_loading" @click="saveEdit">{{ $t("general.save") }}</Button>
                     </div>
                 </Form>
             </div>
         </Card>
         <Modal v-model="editPasswordModal" :closable='false' :mask-closable=false :width="500">
-            <h3 slot="header" style="color:#2D8CF0">修改密码</h3>
+            <h3 slot="header" style="color:#2D8CF0">{{ $t("settings.change_password") }}</h3>
             <Form ref="editPasswordForm" :model="editPasswordForm" :label-width="100" label-position="right" :rules="passwordValidate">
                 <FormItem label="原密码" prop="oldPass" :error="oldPassError">
                     <Input v-model="editPasswordForm.oldPass" type="password" placeholder="请输入现在使用的密码" ></Input>
@@ -48,7 +55,7 @@
             </Form>
             <div slot="footer">
                 <Button type="text" @click="cancelEditPass">取消</Button>
-                <Button type="primary" :loading="savePassLoading" @click="saveEditPass">保存</Button>
+                <Button type="primary" :loading="savePassLoading" @click="saveEditPass">{{ $t("general.save") }}</Button>
             </div>
         </Modal>
     </div>
@@ -56,7 +63,7 @@
 
 <script>
 import util from '../../libs/util'
-
+import { setLang } from '@/i18n/config'
 export default {
   name: 'ownspace_index',
   data () {
@@ -70,8 +77,15 @@ export default {
     return {
       userForm: {
         userName: '',
-        email: ''
+        email: '',
+        language: ''
       },
+      selected_language: '',
+      languages: [
+        'English',
+        '中文(简体)',
+        'Deutschland'
+      ],
       uid: '', // 登录用户的userId
       securityCode: '', // 验证码
       phoneHasChanged: false, // 是否编辑了手机
@@ -152,6 +166,7 @@ export default {
       })
     },
     saveEdit () {
+      setLang (this.selected_language)
       this.$refs['userForm'].validate((valid) => {
         if (valid) {
           this.saveInfoAjax()
