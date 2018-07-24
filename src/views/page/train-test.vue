@@ -3,7 +3,7 @@
         <Card>
             <p slot="title" style="overflow: visible">
                 <Row>
-                    <Col span="20"><Icon type="ios-keypad"></Icon> {{groupName}} - {{taskName}} 模型测试</Col>
+                    <Col span="20"><Icon type="ios-keypad"></Icon> {{groupName}} - {{taskName}} {{ $t("training.model_testing") }}</Col>
                     <Col span="4" align="right"></Col>
                 </Row>
             </p>
@@ -11,7 +11,7 @@
               <div style="text-align:center">
                 <Form ref="addForm">
                   <Upload :action="uploadURL" with-credentials name="pic" :data="formData" :on-success="upSuccess" :on-error="upError" :before-upload="upBefore">
-                    <Button type="ghost" icon="ios-cloud-upload-outline">上传</Button>
+                    <Button type="ghost" icon="ios-cloud-upload-outline">{{ $t("general.upload_image") }}</Button>
                   </Upload>
                 </Form>
               </div>
@@ -26,7 +26,7 @@
           <div>
             <h4>Request Address</h4>
             <pre>{{ inferenceEndpoint }}</pre>
-            <p><a href="https://docs.cvtron.xyz/zh/guide/serve-reference/">How to use?</a></p>
+            <p><a href="https://docs.cvtron.xyz/zh/guide/serve-reference/">{{ $t("menus.how_to_use") }}</a></p>
           </div>
         </Card>
     </div>

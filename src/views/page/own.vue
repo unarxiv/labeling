@@ -43,18 +43,18 @@
         <Modal v-model="editPasswordModal" :closable='false' :mask-closable=false :width="500">
             <h3 slot="header" style="color:#2D8CF0">{{ $t("settings.change_password") }}</h3>
             <Form ref="editPasswordForm" :model="editPasswordForm" :label-width="100" label-position="right" :rules="passwordValidate">
-                <FormItem label="原密码" prop="oldPass" :error="oldPassError">
-                    <Input v-model="editPasswordForm.oldPass" type="password" placeholder="请输入现在使用的密码" ></Input>
+                <FormItem :label="$t('settings.original_password')" prop="oldPass" :error="oldPassError">
+                    <Input v-model="editPasswordForm.oldPass" type="password" :placeholder="$t('settings.input_original_password')" ></Input>
                 </FormItem>
-                <FormItem label="新密码" prop="newPass">
-                    <Input v-model="editPasswordForm.newPass" type="password" placeholder="请输入新密码，至少6位字符" ></Input>
+                <FormItem :label="$t('settings.new_password')" prop="newPass">
+                    <Input v-model="editPasswordForm.newPass" type="password" :placeholder="$t('settings.input_new_password')" ></Input>
                 </FormItem>
-                <FormItem label="确认新密码" prop="rePass">
-                    <Input v-model="editPasswordForm.rePass" type="password" placeholder="请再次输入新密码" ></Input>
+                <FormItem :label="$t('settings.confirm_new_password')" prop="rePass">
+                    <Input v-model="editPasswordForm.rePass" type="password" :placeholder="$t('settings.input_new_password_again')" ></Input>
                 </FormItem>
             </Form>
             <div slot="footer">
-                <Button type="text" @click="cancelEditPass">取消</Button>
+                <Button type="text" @click="cancelEditPass">{{ $t("general.cancel") }}</Button>
                 <Button type="primary" :loading="savePassLoading" @click="saveEditPass">{{ $t("general.save") }}</Button>
             </div>
         </Modal>
@@ -166,7 +166,7 @@ export default {
       })
     },
     saveEdit () {
-      setLang (this.selected_language)
+      setLang(this.selected_language)
       this.$refs['userForm'].validate((valid) => {
         if (valid) {
           this.saveInfoAjax()

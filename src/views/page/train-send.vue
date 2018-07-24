@@ -3,7 +3,7 @@
         <Card>
             <p slot="title" style="overflow: visible">
                 <Row>
-                    <Col span="20"><Icon type="ios-keypad"></Icon> 模型训练 > {{groupName}} - {{taskName}} </Col>
+                    <Col span="20"><Icon type="ios-keypad"></Icon> {{ $t("training.model_training") }} > {{groupName}} - {{taskName}} </Col>
                     <Col span="4" align="right"></Col>
                 </Row>
             </p>
@@ -11,7 +11,7 @@
               <Form ref="configForm" label-position="right" :label-width="160">
                   <trainConfig :list="[]" ref="trainConfig"></trainConfig>
                   <FormItem>
-                    <Button type="primary" :loading="save_loading" @click="send">提交</Button>
+                    <Button type="primary" :loading="save_loading" @click="send">{{ $t("general.submit") }}</Button>
                   </FormItem>
               </Form>
             </div>

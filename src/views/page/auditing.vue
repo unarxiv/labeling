@@ -3,7 +3,7 @@
         <Card>
             <p slot="title" style="overflow: visible">
                 <Row>
-                    <Col span="20"><Icon type="ios-keypad"></Icon> 数据审核</Col>
+                    <Col span="20"><Icon type="ios-keypad"></Icon> {{ $t("auditing.data_review") }}</Col>
                     <Col span="4" align="right">
                     </Col>
                 </Row>
@@ -21,28 +21,28 @@
         <Modal v-model="add" :closable='false' :mask-closable=false :width="800">
             <h3 slot="header" style="color:#2D8CF0">{{addText}}</h3>
             <Form ref="addForm" label-position="right" :rules="formValidate">
-                <FormItem label="分组名称" prop="name">
-                    <Input placeholder="请输入分组名" style="width:60%"></Input>
+                <FormItem :label="$t('auditing.group_name')" prop="name">
+                    <Input :placeholder="$t('auditing.input_group_name')" style="width:60%"></Input>
                 </FormItem>
             </Form>
             <Form ref="addForm" label-position="right" :rules="formValidate">
-                <FormItem label="标注人员" prop="name">
-                    <Input placeholder="请输入帐号或邮箱，多个用‘,’分开"></Input>
+                <FormItem :label="$t('auditing.label')" prop="name">
+                    <Input :placeholder="$t('auditing.input_account_or_email')"></Input>
                 </FormItem>
             </Form>
             <Form ref="addForm" label-position="right" :rules="formValidate">
-                <FormItem label="上传人员" prop="name">
-                    <Input placeholder="请输入帐号或邮箱，多个用‘,’分开"></Input>
+                <FormItem :label="$t('auditing.upload')" prop="name">
+                    <Input :placeholder="$t('auditing.input_account_or_email')"></Input>
                 </FormItem>
             </Form>
             <Form ref="addForm" label-position="right" :rules="formValidate">
-                <FormItem label="审核人员" prop="name">
-                    <Input placeholder="请输入帐号或邮箱，多个用‘,’分开"></Input>
+                <FormItem :label="$t('auditing.audit')" prop="name">
+                    <Input :placeholder="$t('auditing.input_account_or_email')"></Input>
                 </FormItem>
             </Form>
             <div slot="footer">
-                <Button type="text" @click="cancelAdd">取消</Button>
-                <Button type="primary" :loading="save_loading" @click="saveAdd">提交</Button>
+                <Button type="text" @click="cancelAdd">{{ $t("general.cancel") }}</Button>
+                <Button type="primary" :loading="save_loading" @click="saveAdd">{{ $t("general.submit") }}</Button>
             </div>
         </Modal>
     </div>
@@ -56,40 +56,40 @@ export default {
     return {
       columns: [
         {
-          title: '编号',
+          title: $t("menus.number"),
           key: 'idTaskInfo'
         },
         {
-          title: '分组',
+          title: $t("menus.group"),
           key: 'groupName'
         },
         {
-          title: '批次',
+          title: $t("menus.batch"),
           key: 'taskName'
         },
         {
-          title: '已审核',
+          title: $t("menus.audited"),
           key: 'auditNum'
         },
         {
-          title: '待审核',
+          title: $t("status.to_be_audited"),
           key: 'unAuditNum'
         },
         {
-          title: '待标注',
+          title: $t("status.to_be_labelled"),
           key: 'unSignNum'
         },
         {
-          title: '总数',
+          title: $t("menus.total"),
           key: 'allNum'
         },
         {
-          title: '创建时间',
+          title: $t("menus.create_time"),
           key: 'createdDate',
           width: 200
         },
         {
-          title: '设置',
+          title: $t("menus.setting"),
           key: 'action',
           width: 120,
           render: (h, params) => {
@@ -119,13 +119,13 @@ export default {
       data: [
       ],
       add: false,
-      addText: '创建批次',
+      addText: $t("tagging.create_batch"),
       formValidate: {
         taskName: [
-          { required: true, message: '请填写批次名', trigger: 'blur' }
+          { required: true, message:  $t("tagging.input_batch_name"), trigger: 'blur' }
         ],
         idGroup: [
-          { required: true, message: '请选择分组', trigger: 'change' }
+          { required: true, message:  $t("auditing.choose_group"), trigger: 'change' }
         ]
       },
       save_loading: false,
@@ -142,15 +142,15 @@ export default {
   methods: {
     showAdd () {
       this.add = true
-      this.addText = '创建分组'
+      this.addText = $t("auditing.create_group")
     },
     showEdit () {
       this.add = true
-      this.addText = '编辑分组'
+      this.addText = $t("auditing.edit_group")
     },
     saveAdd () {
       this.add = false
-      this.$Message.success('创建成功')
+      this.$Message.success($t("auditing.create_success"))
     },
     cancelAdd () {
       this.add = false

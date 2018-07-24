@@ -1,19 +1,19 @@
 <template>
     <div>
         <div class="expand-row">
-            <span class="expand-key">上传成员: </span>
+            <span class="expand-key">{{ $t("auditing.upload") }}: </span>
             <span class="expand-value"><i v-for="(item,key) in row.uploadMemberList" :key="key">{{item.userName}}({{item.email}})</i></span>
         </div>
         <div class="expand-row">
-            <span class="expand-key">标注成员: </span>
+            <span class="expand-key">{{ $t("auditing.label") }}: </span>
             <span class="expand-value"><i v-for="(item,key) in row.labelMemberList" :key="key">{{item.userName}}({{item.email}})</i></span>
         </div>
         <div class="expand-row">
-            <span class="expand-key">审核人: </span>
+            <span class="expand-key">{{ $t("auditing.audit") }}: </span>
             <span class="expand-value"><i v-for="(item,key) in row.auditMemberList" :key="key">{{item.userName}}({{item.email}})</i></span>
         </div>
         <div class="expand-row">
-            <span class="expand-key">创建人: </span>
+            <span class="expand-key">{{ $t("auditing.create") }}: </span>
             <span class="expand-value"><i>{{ row.createdName }}({{row.email}})</i></span>
         </div>
     </div>

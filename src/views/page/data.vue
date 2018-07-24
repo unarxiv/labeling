@@ -3,9 +3,9 @@
         <Card>
             <p slot="title" style="overflow: visible">
                 <Row>
-                    <Col span="20"><Icon type="ios-keypad"></Icon> 分组管理</Col>
+                    <Col span="20"><Icon type="ios-keypad"></Icon> {{ $t("auditing.group_management") }}</Col>
                     <Col span="4" align="right">
-                    <Button type="ghost" shape="circle" icon="android-add" @click="showAdd">添加分组</Button></Col>
+                    <Button type="ghost" shape="circle" icon="android-add" @click="showAdd">{{ $t("auditing.add_group") }}</Button></Col>
                 </Row>
             </p>
             <Row>
@@ -21,17 +21,17 @@
         <Modal v-model="add" :closable='false' :mask-closable=false :width="600">
             <h3 slot="header" style="color:#2D8CF0">{{addText}}</h3>
             <Form ref="addForm" :model="form" label-position="right" :rules="formValidate" :label-width="80">
-                <FormItem label="分组名称" prop="groupName">
-                    <Input v-model="form.groupName" placeholder="请输入分组名" style="width:60%"></Input>
+                <FormItem :label="$t('auditing.group_name')" prop="groupName">
+                    <Input v-model="form.groupName" :placeholder="$t('auditing.input_group_name')" style="width:60%"></Input>
                 </FormItem>
 
-                <FormItem label="上传人员" prop="uploadMember">
+                <FormItem :label="$t('auditing.upload')" prop="uploadMember">
                    <Select
                         v-model="form.uploadMember"
                         multiple
                         filterable
                         remote
-                        placeholder="用户名或者邮箱"
+                        :placeholder="$t('auditing.name_or_email')"
                         :remote-method="getUserUploadMember"
                         :loading="loading1"
                         :label="form.uploadMemberLabel">
@@ -39,13 +39,13 @@
                     </Select>
                 </FormItem>
 
-                <FormItem label="标注人员" prop="labelMember">
+                <FormItem :label="$t('auditing.label')" prop="labelMember">
                     <Select
                         v-model="form.labelMember"
                         multiple
                         filterable
                         remote
-                        placeholder="用户名或者邮箱"
+                        :placeholder="$t('auditing.name_or_email')"
                         :remote-method="getUserLabelMember"
                         :loading="loading2"
                         :label="form.labelMemberLabel">
@@ -53,13 +53,13 @@
                     </Select>
                 </FormItem>
 
-                <FormItem label="审核人员" prop="auditMember">
+                <FormItem :label="$t('auditing.audit')" prop="auditMember">
                     <Select
                         v-model="form.auditMember"
                         multiple
                         filterable
                         remote
-                        placeholder="用户名或者邮箱"
+                        :placeholder="$t('auditing.name_or_email')"
                         :remote-method="getUserAuditMember"
                         :loading="loading3"
                         :label="form.auditMemberLabel">
@@ -68,8 +68,8 @@
                 </FormItem>
             </Form>
             <div slot="footer">
-                <Button type="text" @click="cancelAdd">取消</Button>
-                <Button type="primary" :loading="save_loading" @click="saveAdd">提交</Button>
+                <Button type="text" @click="cancelAdd">{{ $t("general.cancel") }}</Button>
+                <Button type="primary" :loading="save_loading" @click="saveAdd">{{ $t("general.submit") }}</Button>
             </div>
         </Modal>
     </div>

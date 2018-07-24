@@ -2,7 +2,7 @@
     <div class="layout-home">
       <Card>
             <p slot="title" class="title">
-                欢迎使用标注系统
+                {{ $t("menus.welcome") }}
             </p>
             <Row>
                 <Col span="2">&nbsp;</Col>

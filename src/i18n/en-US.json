@@ -16,7 +16,13 @@
             "login_password": "Password"
         },
         "personal_information": "Personal Information",
-        "change_password": "Change Password"
+        "change_password": "Change Password",
+        "original_password": "Original Password",
+        "input_original_password": "Please input your original password",
+        "new_password": "New Password",
+        "input_new_password": "Please input your new password, at least six characters",
+        "confirm_new_password": "Confirm your new password",
+        "input_new_password_again": "Please input your new password again"
     },
     "menus": {
         "home": "Home",
@@ -34,6 +40,7 @@
         }
     },
     "general": {
-        "save" : "Save"
+        "save" : "Save",
+        "cancel": "Cancel"
     }
 }

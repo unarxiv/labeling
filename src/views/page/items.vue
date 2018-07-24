@@ -6,19 +6,19 @@
                     <Col span="8"><Icon type="ios-keypad"></Icon> {{type | title}} > {{groupName}} - {{taskName}}</Col>
                     <Col align="right">
                         <Select style="width:100px;text-align:left" @on-change="selectType" v-if="power!=3">
-                            <Option value="0">全部</Option>
-                            <Option value="1">待标注</Option>
-                            <Option value="2">待审核</Option>
-                            <Option value="3">已审核</Option>
-                            <Option value="4">已送训练</Option>
+                            <Option value="0">{{ $t("menus.all") }}</Option>
+                            <Option value="1">{{ $t("status.to_be_labelled") }}</Option>
+                            <Option value="2">{{ $t("status.to_be_audited") }}</Option>
+                            <Option value="3">{{ $t("status.audited") }}</Option>
+                            <Option value="4">{{ $t("status.training") }}</Option>
                         </Select>
-                        <Button :type="checkAll?'primary':'default'" @click="selectAll" :icon="checkAll?'android-checkbox-outline':'android-checkbox-outline-blank'">全选</Button>
-                        <Button icon="android-delete" v-if="power==1" :disabled="used()" @click="deleteImgs">删除</Button>
-                        <Button icon="checkmark" v-if="power==1" :disabled="used()" @click="changeType(2)">提交审核</Button>
-                        <Button icon="checkmark" v-if="power==2" :disabled="used()" @click="changeType(3)">审核通过</Button>
-                        <Button icon="android-arrow-back" v-if="power==2" @click="backShow" :disabled="used()">退回</Button>
-                        <Button icon="checkmark" v-if="power==3" :disabled="used()" @click="showTrain">提交训练</Button>
-                        <Button icon="android-add" @click="addImage" v-if="power==1">添加图片</Button>
+                        <Button :type="checkAll?'primary':'default'" @click="selectAll" :icon="checkAll?'android-checkbox-outline':'android-checkbox-outline-blank'">{{ $t("status.all_selected") }}</Button>
+                        <Button icon="android-delete" v-if="power==1" :disabled="used()" @click="deleteImgs">{{ $t("general.delete") }}</Button>
+                        <Button icon="checkmark" v-if="power==1" :disabled="used()" @click="changeType(2)">{{ $t("status.submit_for_review") }}</Button>
+                        <Button icon="checkmark" v-if="power==2" :disabled="used()" @click="changeType(3)">{{ $t("status.accepted") }}</Button>
+                        <Button icon="android-arrow-back" v-if="power==2" @click="backShow" :disabled="used()">{{ $t("general.reject") }}</Button>
+                        <Button icon="checkmark" v-if="power==3" :disabled="used()" @click="showTrain">{{ $t("status.submit_for_training") }}</Button>
+                        <Button icon="android-add" @click="addImage" v-if="power==1">{{ $t("general.add_image") }}</Button>
                     </Col>
                 </Row>
             </p>
@@ -31,17 +31,17 @@
                                 <div class="item-button">
                                    <Row>
                                      <Col span="18">{{i.fileName}}</Col>
-                                     <Col span="6" align="right"><Button @click="go(i)" size="small">查看</Button></Col>
+                                     <Col span="6" align="right"><Button @click="go(i)" size="small">{{ $t("general.review") }}</Button></Col>
                                   </Row>
                                 </div>
                                 <div class="ivu-poptip-popper item-audit-msg" x-placement="bottom-end" v-if="i.auditMsg && i.auditMsg.length>0 && i.status==='1'">
                                   <div>
                                     <div class="ivu-poptip-arrow"></div>
-                                    <div class="item-audit-box">退回原因：{{i.auditMsg}}</div>
+                                    <div class="item-audit-box">{{ $t("status.reason_for_rejected") }}：{{i.auditMsg}}</div>
                                   </div>
                                 </div>
                                 <div class="item-status" :status="i.status">
-                                  <template v-if="i.auditMsg && i.auditMsg.length>0 && i.status==='1'">退回-待标注</template>
+                                  <template v-if="i.auditMsg && i.auditMsg.length>0 && i.status==='1'">{{ $t("status.reject_to_be_labelled") }}</template>
                                   <template v-else>{{i.status|status}}</template>
                                 </div>
                                 <div class="item-checked" v-if="i.selected">
@@ -60,7 +60,7 @@
             </p>
         </Card>
         <Modal v-model="add" :closable='false' :mask-closable=false :width="600">
-            <h3 slot="header" style="color:#2D8CF0">添加图片</h3>
+            <h3 slot="header" style="color:#2D8CF0">{{ $t("general.add_image") }}</h3>
             <Form ref="addForm" label-position="right" :label-width="80">
                 <!-- <FormItem label="上传类型">
                     <Select>
@@ -69,33 +69,33 @@
                     </Select>
                 </FormItem> -->
                 <Upload multiple :action="uploadURL" with-credentials name="pic" :data="formData">
-                        <span>多选文件上传&nbsp;&nbsp;</span>
-                        <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+                        <span>{{ $t("general.multi_file_upload") }}&nbsp;&nbsp;</span>
+                        <Button type="ghost" icon="ios-cloud-upload-outline">{{ $t("general.upload_file") }}</Button>
                     </Upload>
             </Form>
             <div slot="footer">
                 <!-- <Button type="text" @click="cancelAdd">取消</Button> -->
-                <Button type="primary" :loading="save_loading" @click="saveAdd">完成</Button>
+                <Button type="primary" :loading="save_loading" @click="saveAdd">{{ $t("general.finish") }}</Button>
             </div>
         </Modal>
         <Modal v-model="back">
-            <h3 slot="header" style="color:#2D8CF0">退回</h3>
+            <h3 slot="header" style="color:#2D8CF0">{{ $t("general.reject") }}</h3>
             <Form ref="backForm" :model="backForm" label-position="right" :label-width="80" :rules="backFormRule">
                 <FormItem label="退回原因" prop="auditMsg">
                    <Input v-model="backForm.auditMsg" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
                 </FormItem>
             </Form>
             <div slot="footer">
-                <Button type="text" @click="cancelAdd">取消</Button>
-                <Button type="primary" :loading="save_loading" @click="saveBack">提交</Button>
+                <Button type="text" @click="cancelAdd">{{ $t("general.cancel") }}</Button>
+                <Button type="primary" :loading="save_loading" @click="saveBack">{{ $t("general.submit") }}</Button>
             </div>
         </Modal>
         <Modal v-model="train" width="800">
-          <h3 slot="header" style="color:#2D8CF0">设置训练参数</h3>
+          <h3 slot="header" style="color:#2D8CF0">{{ $t("general.set_training_paramter") }}</h3>
           <trainConfig :list="trainList" ref="trainConfig"></trainConfig>
           <div slot="footer">
-            <Button type="text" @click="closeTrain">取消</Button>
-            <Button type="primary" :loading="save_loading" @click="sendTrain">提交</Button>
+            <Button type="text" @click="closeTrain">{{ $t("general.cancel") }}</Button>
+            <Button type="primary" :loading="save_loading" @click="sendTrain">{{ $t("general.submit") }}</Button>
           </div>
         </Modal>
     </div>
@@ -130,7 +130,7 @@ export default {
         auditMsg: ''
       },
       backFormRule: {
-        auditMsg: [{ required: true, message: '请输入退回原因', trigger: 'blur' }]
+        auditMsg: [{ required: true, message: $t("status.rejected_message"), trigger: 'blur' }]
       },
       data: [],
       state: null,
@@ -144,19 +144,19 @@ export default {
     status (v) {
       let r = ''
       switch (v) {
-        case '1':r = '待标注'; break
-        case '2':r = '待审核'; break
-        case '3':r = '已审核'; break
-        case '4':r = '已送训练'; break
+        case '1':r = $t("status.to_be_labelled"); break
+        case '2':r = $t("status.to_be_audited"); break
+        case '3':r = $t("status.audited"); break
+        case '4':r = $t("status.training"); break
       }
       return r
     },
     title (v) {
       let r = ''
       switch (v) {
-        case 'tagging':r = '数据标注'; break
-        case 'auditing':r = '数据审核'; break
-        case 'training':r = '模型训练'; break
+        case 'tagging':r = $t("tagging.data_labeling"); break
+        case 'auditing':r = $t("auditing.data_review"); break
+        case 'training':r = $t("training.model_training"); break
       }
       return r
     }
@@ -320,7 +320,7 @@ export default {
         if (!res.data.status) {
           this.$Message.error(res.data.errormsg)
         } else {
-          this.$Message.success('操作成功！')
+          this.$Message.success($t("status.success"))
           this.getData()
         }
       })

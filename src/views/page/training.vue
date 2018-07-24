@@ -3,7 +3,7 @@
         <Card>
             <p slot="title" style="overflow: visible">
                 <Row>
-                    <Col span="20"><Icon type="ios-keypad"></Icon> 模型训练</Col>
+                    <Col span="20"><Icon type="ios-keypad"></Icon> {{ $t("training.model_training") }}</Col>
                     <Col span="4" align="right">
                     </Col>
                 </Row>
@@ -109,7 +109,7 @@ export default {
       data: [
       ],
       add: false,
-      addText: '创建分组',
+      addText: $t("auditing.create_group"),
       formValidate: {},
       save_loading: false,
       total: 0,
@@ -120,15 +120,15 @@ export default {
   methods: {
     showAdd () {
       this.add = true
-      this.addText = '创建分组'
+      this.addText = $t("auditing.create_group")
     },
     showEdit () {
       this.add = true
-      this.addText = '编辑分组'
+      this.addText = $t("auditing.edit_group")
     },
     saveAdd () {
       this.add = false
-      this.$Message.success('创建成功')
+      this.$Message.success($t("auditing.create_success"))
     },
     cancelAdd () {
       this.add = false

@@ -1,7 +1,7 @@
 <template>
     <div>
       <div style="height:60px;">
-        <span>选择类型:</span>
+        <span>{{ $t("training.choose_type") }}:</span>
         <Select @on-change="selectType" style="width:100px" v-model="type">
           <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
@@ -33,15 +33,15 @@ export default {
       typeList: [
         {
           value: 'detector',
-          label: '检测'
+          label: $t("training.detection")
         },
         {
           value: 'segmentor',
-          label: '分割'
+          label: $t("training.segmentation")
         },
         {
           value: 'classifier',
-          label: '分类'
+          label: $t("training.classification")
         }
       ],
       type: 'detector'
