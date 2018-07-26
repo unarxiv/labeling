@@ -166,10 +166,8 @@ export default {
     }
   },
   mounted () {
-    console.log('1234')
   },
   created () {
-    console.log('created')
     this.getGroup()
     this.getData()
   }

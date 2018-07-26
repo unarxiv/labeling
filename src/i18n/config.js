@@ -7,6 +7,9 @@ function setLang (lang) {
 }
 
 function loadDefautlLang (lang) {
+  if (localStorage.getItem('lang') === null) {
+    localStorage.setItem('lang', 'English')
+  }
   i18n.locale = map[localStorage.getItem('lang')]
 }
 
