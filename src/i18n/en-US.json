@@ -31,7 +31,16 @@
         "trainjobs": "Train Task",
         "settings": "Settings",
         "hardware": "Hardware Info",
-        "camera": "Camera"
+        "camera": "Camera",
+        "welcome": "Welcome to CVTron",
+        "all": "All",
+        "how_to_use": "How to use?",
+        "number": "No.",
+        "group": "Group",
+        "batch": "Batch",
+        "total": "Total",
+        "create_time": "CreatedAt",
+        "setting": "Settings"
     },
     "tasks": {
         "dashboard": {
@@ -41,6 +50,60 @@
     },
     "general": {
         "save" : "Save",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "submit": "Submit",
+        "delete": "Delete",
+        "reject": "Reject",
+        "review": "Review",
+        "finish": "Complete",
+        "add_image":"Add Image",
+        "multi_file_upload": "Choose File",
+        "upload_file": "Upload File",
+        "set_training_paramter": "Set Training Params",
+        "upload_image": "Upload Image"
+    },
+    "auditing": {
+        "data_review": "Data Review",
+        "add_group": "Add Group",
+        "create_group": "Create Group",
+        "edit_group": "Edit Group",
+        "create_success":"Created Successfully",
+        "group_name": "Group Name",
+        "choose_group": "Choose Group",
+        "input_group_name": "Please Input Group Name",
+        "group_management": "Group Manage",
+        "label": "Label",
+        "input_account_or_email": "Username or Email，use comma to separate",
+        "name_or_email": "Username or Email",
+        "upload": "Upload",
+        "audit": "Review",
+        "create": "Create"
+    },
+    "status": {
+        "to_be_labelled": "Need Labeling",
+        "to_be_audited": "Need Review",
+        "audited": "Reviewed",
+        "training": "Training",
+        "all_selected": "All",
+        "submit_for_review": "Submit for Review",
+        "accepted": "Accepted",
+        "submit_for_training": "Submit for Training",
+        "reason_for_rejected": "Reasons for Reject",
+        "reject_to_be_labelled": "Reject-Need Labeling",
+        "rejected_message": "Please input the reason",
+        "success": "Successfully"
+    },
+    "tagging": {
+        "data_labeling": "Data Labeling",
+        "create_batch": "Create Batch",
+        "input_batch_name": "Batch Name"
+    },
+    "training": {
+        "model_training": "Model Training",
+        "model_testing": "Model Testing",
+        "choose_type": "Choose Type",
+        "detection": "Detection",
+        "segmentation": "Segmentation",
+        "classification": "Classification"
     }
 }

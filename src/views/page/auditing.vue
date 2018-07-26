@@ -56,40 +56,40 @@ export default {
     return {
       columns: [
         {
-          title: $t("menus.number"),
+          title: $t('menus.number'),
           key: 'idTaskInfo'
         },
         {
-          title: $t("menus.group"),
+          title: $t('menus.group'),
           key: 'groupName'
         },
         {
-          title: $t("menus.batch"),
+          title: $t('menus.batch'),
           key: 'taskName'
         },
         {
-          title: $t("menus.audited"),
+          title: $t('menus.audited'),
           key: 'auditNum'
         },
         {
-          title: $t("status.to_be_audited"),
+          title: $t('status.to_be_audited'),
           key: 'unAuditNum'
         },
         {
-          title: $t("status.to_be_labelled"),
+          title: $t('status.to_be_labelled'),
           key: 'unSignNum'
         },
         {
-          title: $t("menus.total"),
+          title: $t('menus.total'),
           key: 'allNum'
         },
         {
-          title: $t("menus.create_time"),
+          title: $t('menus.create_time'),
           key: 'createdDate',
           width: 200
         },
         {
-          title: $t("menus.setting"),
+          title: $t('menus.setting'),
           key: 'action',
           width: 120,
           render: (h, params) => {
@@ -119,13 +119,13 @@ export default {
       data: [
       ],
       add: false,
-      addText: $t("tagging.create_batch"),
+      addText: $t('tagging.create_batch'),
       formValidate: {
         taskName: [
-          { required: true, message:  $t("tagging.input_batch_name"), trigger: 'blur' }
+          { required: true, message: $t('tagging.input_batch_name'), trigger: 'blur' }
         ],
         idGroup: [
-          { required: true, message:  $t("auditing.choose_group"), trigger: 'change' }
+          { required: true, message: $t('auditing.choose_group'), trigger: 'change' }
         ]
       },
       save_loading: false,
@@ -142,15 +142,15 @@ export default {
   methods: {
     showAdd () {
       this.add = true
-      this.addText = $t("auditing.create_group")
+      this.addText = $t('auditing.create_group')
     },
     showEdit () {
       this.add = true
-      this.addText = $t("auditing.edit_group")
+      this.addText = $t('auditing.edit_group')
     },
     saveAdd () {
       this.add = false
-      this.$Message.success($t("auditing.create_success"))
+      this.$Message.success($t('auditing.create_success'))
     },
     cancelAdd () {
       this.add = false

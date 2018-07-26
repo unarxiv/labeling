@@ -130,7 +130,7 @@ export default {
         auditMsg: ''
       },
       backFormRule: {
-        auditMsg: [{ required: true, message: $t("status.rejected_message"), trigger: 'blur' }]
+        auditMsg: [{ required: true, message: $t('status.rejected_message'), trigger: 'blur' }]
       },
       data: [],
       state: null,
@@ -144,19 +144,19 @@ export default {
     status (v) {
       let r = ''
       switch (v) {
-        case '1':r = $t("status.to_be_labelled"); break
-        case '2':r = $t("status.to_be_audited"); break
-        case '3':r = $t("status.audited"); break
-        case '4':r = $t("status.training"); break
+        case '1':r = $t('status.to_be_labelled'); break
+        case '2':r = $t('status.to_be_audited'); break
+        case '3':r = $t('status.audited'); break
+        case '4':r = $t('status.training'); break
       }
       return r
     },
     title (v) {
       let r = ''
       switch (v) {
-        case 'tagging':r = $t("tagging.data_labeling"); break
-        case 'auditing':r = $t("auditing.data_review"); break
-        case 'training':r = $t("training.model_training"); break
+        case 'tagging':r = $t('tagging.data_labeling'); break
+        case 'auditing':r = $t('auditing.data_review'); break
+        case 'training':r = $t('training.model_training'); break
       }
       return r
     }
@@ -320,7 +320,7 @@ export default {
         if (!res.data.status) {
           this.$Message.error(res.data.errormsg)
         } else {
-          this.$Message.success($t("status.success"))
+          this.$Message.success($t('status.success'))
           this.getData()
         }
       })
