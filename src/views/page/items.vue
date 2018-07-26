@@ -271,12 +271,14 @@ export default {
       this.trainList = list
       this.save_loading = true
       if (list.length > 0) {
+        let selectedModel = this.$refs.trainConfig.selected_model
         let config = this.$refs.trainConfig.config
         let type = this.$refs.trainConfig.type
         util.ajax.post('/train/startTrain.do', {
           config: config,
           signInfoIds: list,
-          trainType: type
+          trainType: type,
+          modelId: selectedModel
         }).then(res => {
           this.save_loading = false
           if (!res.data.status) {

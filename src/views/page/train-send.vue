@@ -35,13 +35,15 @@ export default {
   },
   methods: {
     send () {
+      let selectedModel = this.$refs.selected_model
       let config = this.$refs.trainConfig.config
       let type = this.$refs.trainConfig.type
       this.save_loading = true
       util.ajax.post('/train/reStartTrain.do', {
         config: config,
         idTrainInfo: this.id,
-        trainType: type
+        trainType: type,
+        modelId: selectedModel
       }).then(res => {
         this.save_loading = false
         if (!res.data.status) {
