@@ -6,12 +6,13 @@ import i18n from '@/i18n'
 import {router} from './router'
 import 'babel-polyfill'
 import ElementDataset from 'element-dataset'
+import locale from 'iview/dist/locale/en-US'
 
 window.Promise = Promise
 ElementDataset()
-Vue.config.productionTip = false
 
-Vue.use(iView)
+Vue.config.productionTip = false
+Vue.use(iView, { locale })
 
 /* eslint-disable no-new */
 new Vue({

@@ -109,7 +109,7 @@ export default {
       data: [
       ],
       add: false,
-      addText: $t('auditing.create_group'),
+      addText: this.$t('auditing.create_group'),
       formValidate: {},
       save_loading: false,
       total: 0,
@@ -120,15 +120,15 @@ export default {
   methods: {
     showAdd () {
       this.add = true
-      this.addText = $t('auditing.create_group')
+      this.addText = this.$t('auditing.create_group')
     },
     showEdit () {
       this.add = true
-      this.addText = $t('auditing.edit_group')
+      this.addText = this.$t('auditing.edit_group')
     },
     saveAdd () {
       this.add = false
-      this.$Message.success($t('auditing.create_success'))
+      this.$Message.success(this.$t('auditing.create_success'))
     },
     cancelAdd () {
       this.add = false
@@ -165,7 +165,11 @@ export default {
       this.getData()
     }
   },
+  mounted () {
+    console.log('1234')
+  },
   created () {
+    console.log('created')
     this.getGroup()
     this.getData()
   }

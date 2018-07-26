@@ -10,7 +10,9 @@ const messages = {
   zh: zhCN
 }
 
-export default new VueI18n({
+const i18n = new VueI18n({
   locale: 'en',
   messages
 })
+
+export default i18n

@@ -3,8 +3,12 @@
 </template>
 
 <script>
+import { loadDefautlLang } from '@/i18n/config'
 export default {
-  name: 'App'
+  name: 'App',
+  created () {
+    loadDefautlLang()
+  }
 }
 </script>
 

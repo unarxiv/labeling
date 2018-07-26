@@ -33,15 +33,15 @@ export default {
       typeList: [
         {
           value: 'detector',
-          label: $t('training.detection')
+          label: this.$t('training.detection')
         },
         {
           value: 'segmentor',
-          label: $t('training.segmentation')
+          label: this.$t('training.segmentation')
         },
         {
           value: 'classifier',
-          label: $t('training.classification')
+          label: this.$t('training.classification')
         }
       ],
       type: 'detector'

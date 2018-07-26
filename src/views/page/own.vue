@@ -63,7 +63,7 @@
 
 <script>
 import util from '../../libs/util'
-import { setLang } from '@/i18n/config'
+import { getLang, setLang } from '@/i18n/config'
 export default {
   name: 'ownspace_index',
   data () {
@@ -80,7 +80,7 @@ export default {
         email: '',
         language: ''
       },
-      selected_language: '',
+      selected_language: getLang(),
       languages: [
         'English',
         '中文(简体)',
