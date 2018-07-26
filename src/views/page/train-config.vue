@@ -12,7 +12,7 @@
       </div>
       <Form ref="configForm" label-position="right" :label-width="160">
           <FormItem :label="v.key" v-for="(v,k) in configList" :key="k" v-if="v.key!='multi_grid'">
-              <Input v-model="config[v.key]"></Input>
+              <Input v-model="config[v.key]"/>
           </FormItem>
       </Form>
     </div>
