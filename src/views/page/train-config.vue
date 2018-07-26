@@ -5,6 +5,10 @@
         <Select @on-change="selectType" style="width:100px" v-model="type">
           <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
+        <span>{{ $t("training.choose_model") }}:</span>
+        <Select @on-change="selected_model" style="width:200px" v-model="selected_model">
+          <Option v-for="item in models" :value="item.name" :key="item.id">{{ item.name }}</Option>
+        </Select>
       </div>
       <Form ref="configForm" label-position="right" :label-width="160">
           <FormItem :label="v.key" v-for="(v,k) in configList" :key="k" v-if="v.key!='multi_grid'">
@@ -14,6 +18,7 @@
     </div>
 </template>
 <script>
+import { getModels } from '@/libs/service'
 import util from '../../libs/util'
 export default {
   name: 'trainConfig',
@@ -44,6 +49,8 @@ export default {
           label: this.$t('training.classification')
         }
       ],
+      models: [],
+      selected_model: '',
       type: 'detector'
     }
   },
@@ -57,6 +64,17 @@ export default {
           this.config = data.config
           this.setConfigList()
         }
+      })
+    },
+    getAvailableModels () {
+      let self = this
+      getModels().then(function (res) {
+        console.log(res)
+        self.models = res.data.filter(function (each) {
+          if (each.task === self.type) {
+            return each
+          }
+        })
       })
     },
     setConfigList () {
@@ -75,6 +93,7 @@ export default {
     }
   },
   created () {
+    this.getAvailableModels()
     this.getConfig()
   }
 }

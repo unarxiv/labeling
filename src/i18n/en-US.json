@@ -104,6 +104,7 @@
         "choose_type": "Choose Type",
         "detection": "Detection",
         "segmentation": "Segmentation",
-        "classification": "Classification"
+        "classification": "Classification",
+        "choose_model": "Choose Model"
     }
 }

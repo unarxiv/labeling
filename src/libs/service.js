@@ -31,8 +31,6 @@ function detect (modelName, image) {
 }
 
 function getLog (logfilename) {
-  console.log('getting remote log')
-  console.log('static/' + logfilename + '/log.json')
   return _getRequest(host + 'static/' + logfilename + '/log.json')
 }
 
@@ -40,7 +38,12 @@ function getInferenceEndpoint (modelName) {
   return host + 'detector/detect?model_name=' + modelName
 }
 
+function getModels () {
+  return _getRequest(host + 'static/' + 'models.json')
+}
+
 export {
+  getModels,
   detect,
   getLog,
   getModelFile,
