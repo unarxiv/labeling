@@ -2,11 +2,11 @@
     <div>
       <div style="height:60px;">
         <span>{{ $t("training.choose_type") }}:</span>
-        <Select @on-change="selectType" style="width:100px" v-model="type">
+        <Select style="width:100px" v-model="type">
           <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
         <span>{{ $t("training.choose_model") }}:</span>
-        <Select @on-change="selected_model" style="width:200px" v-model="selected_model">
+        <Select @on-change="selectModel" style="width:200px" v-model="selected_model">
           <Option v-for="item in models" :value="item.name" :key="item.id">{{ item.name }}</Option>
         </Select>
       </div>
@@ -30,6 +30,12 @@ export default {
       }
     }
   },
+  watch: {
+    type (newVal) {
+      this.getConfig()
+      this.filterModels()
+    }
+  },
   data () {
     return {
       config: null,
@@ -50,6 +56,7 @@ export default {
         }
       ],
       models: [],
+      all_models: [],
       selected_model: '',
       type: 'detector'
     }
@@ -69,7 +76,7 @@ export default {
     getAvailableModels () {
       let self = this
       getModels().then(function (res) {
-        console.log(res)
+        self.all_models = res.data
         self.models = res.data.filter(function (each) {
           if (each.task === self.type) {
             return each
@@ -90,6 +97,18 @@ export default {
     selectType (value) {
       this.type = value
       this.getConfig()
+      this.filterModels()
+    },
+    selectModel (value) {
+
+    },
+    filterModels () {
+      let self = this
+      this.models = this.all_models.filter(function (each) {
+        if (each.task === self.type) {
+          return each
+        }
+      })
     }
   },
   created () {
