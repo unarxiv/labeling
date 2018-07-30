@@ -1,4 +1,19 @@
 {
+    "topmenu": {
+        "product_service":"Services",
+        "solutions":"Solutions",
+        "use_cases":"Use Case",
+        "development": "Development",
+        "cooperations":"Cooperations"
+    },
+    "router": {
+        "label_tool":"Label Toolkit",
+        "label":"Label",
+        "data_audit":"Review",
+        "train":"Train",
+        "group_manage":"Group",
+        "account_manage":"Account"
+    },
     "settings": {
         "general": {
             "title": "General",

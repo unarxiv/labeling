@@ -1,4 +1,19 @@
 {
+    "topmenu": {
+        "product_service":"产品服务",
+        "solutions":"解决方案",
+        "use_cases":"使用案例",
+        "development": "开发资源",
+        "cooperations":"合作伙伴"
+    },
+    "router": {
+        "label_tool":"标注工具",
+        "label":"数据标注",
+        "data_audit":"数据审核",
+        "train":"模型训练",
+        "group_manage":"分组管理",
+        "account_manage":"账户管理"
+    },
     "settings": {
         "general": {
             "title": "通用",

@@ -5,19 +5,19 @@
         </div>
         <Menu mode="horizontal" theme="dark" active-name="1">
             <menu-item name="1-1">
-                <span class="top-menu-title">产品服务</span>
+                <span class="top-menu-title">{{$t("topmenu.product_service")}}</span>
             </menu-item>
             <menu-item name="1-2">
-                <span class="top-menu-title">解决方案</span>
+                <span class="top-menu-title">{{$t("topmenu.solutions")}}</span>
             </menu-item>
             <menu-item name="1-3">
-                <span class="top-menu-title">案例与场景</span>
+                <span class="top-menu-title">{{$t("topmenu.use_cases")}}</span>
             </menu-item>
             <menu-item name="1-4">
-                <span class="top-menu-title">开发资源</span>
+                <span class="top-menu-title">{{$t("topmenu.development")}}</span>
             </menu-item>
             <menu-item name="1-5">
-                <span class="top-menu-title">合作伙伴</span>
+                <span class="top-menu-title">{{$t("topmenu.cooperations")}}</span>
             </menu-item>
         </Menu>
         <div class="layout-console" v-if="isLogin">
