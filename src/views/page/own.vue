@@ -69,7 +69,7 @@ export default {
   data () {
     const valideRePassword = (rule, value, callback) => {
       if (value !== this.editPasswordForm.newPass) {
-        callback(new Error('两次输入密码不一致'))
+        callback(new Error($t("tips.inconsistent_password")))
       } else {
         callback()
       }
@@ -83,7 +83,7 @@ export default {
       selected_language: getLang(),
       languages: [
         'English',
-        '中文(简体)',
+        $t("menus.chinese"),
         'Deutschland'
       ],
       uid: '', // 登录用户的userId
@@ -100,7 +100,7 @@ export default {
       checkIdentifyCodeLoading: false,
       inforValidate: {
         email: [
-          { type: 'email', required: true, message: '请输入常用邮箱', trigger: 'blur' }
+          { type: 'email', required: true, message: $t("tips.input_email"), trigger: 'blur' }
         ]
       },
       editPasswordForm: {
@@ -110,21 +110,21 @@ export default {
       },
       passwordValidate: {
         oldPass: [
-          { required: true, message: '请输入原密码', trigger: 'blur' }
+          { required: true, message: $t("settings.input_original_password"), trigger: 'blur' }
         ],
         newPass: [
-          { required: true, message: '请输入新密码', trigger: 'blur' },
-          { min: 6, message: '请至少输入6个字符', trigger: 'blur' },
-          { max: 32, message: '最多输入32个字符', trigger: 'blur' }
+          { required: true, message: $t("settings.input_new_passoword"), trigger: 'blur' },
+          { min: 6, message: $t("tips.min_length"), trigger: 'blur' },
+          { max: 32, message: $t("tips.max_length"), trigger: 'blur' }
         ],
         rePass: [
-          { required: true, message: '请再次输入新密码', trigger: 'blur' },
+          { required: true, message: $t("settings.input_new_password_again"), trigger: 'blur' },
           { validator: valideRePassword, trigger: 'blur' }
         ]
       },
       inputCodeVisible: false, // 显示填写验证码box
       initPhone: '',
-      gettingIdentifyCodeBtnContent: '获取验证码' // “获取验证码”按钮的文字
+      gettingIdentifyCodeBtnContent: $t("tips.gain_verification_code") // “获取验证码”按钮的文字
     }
   },
   methods: {
@@ -136,11 +136,11 @@ export default {
           let timeLast = 60
           let timer = setInterval(() => {
             if (timeLast >= 0) {
-              this.gettingIdentifyCodeBtnContent = timeLast + '秒后重试'
+              this.gettingIdentifyCodeBtnContent = timeLast + $t("tips.retry")
               timeLast -= 1
             } else {
               clearInterval(timer)
-              this.gettingIdentifyCodeBtnContent = '获取验证码'
+              this.gettingIdentifyCodeBtnContent = $t("tips.gain_verification_code")
               this.canGetIdentifyCode = false
             }
           }, 1000)
@@ -189,7 +189,7 @@ export default {
             if (!res.data.status) {
               this.$Message.error(res.data.errormsg)
             } else {
-              this.$Message.success('修改成功！')
+              this.$Message.success($t("tips.modify_success"))
               this.editPasswordModal = false
             }
           })
@@ -213,10 +213,10 @@ export default {
       let vm = this
       vm.checkIdentifyCodeLoading = true
       if (this.securityCode.length === 0) {
-        this.$Message.error('请填写短信验证码')
+        this.$Message.error($t("tips.write_verification_code"))
       } else {
         setTimeout(() => {
-          this.$Message.success('验证码正确')
+          this.$Message.success($t("tips.verify_verification_code"))
           this.inputCodeVisible = false
           this.checkIdentifyCodeLoading = false
         }, 1000)
@@ -234,7 +234,7 @@ export default {
         if (!res.data.status) {
           this.$Message.error(res.data.errormsg)
         } else {
-          this.$Message.success('保存成功！')
+          this.$Message.success($t("tips.save_success"))
         }
       })
     }

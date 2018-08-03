@@ -26,6 +26,8 @@ module.exports = {
     'generator-star-spacing': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'vue/no-parsing-error': [2, { 'x-invalid-end-tag': false }]
+    'vue/no-parsing-error': [2, { 'x-invalid-end-tag': false }],
+    "vue-i18nstring/no-chinese-character-vue": 1,
+    "vue-i18nstring/no-chinese-character-js": 1
   }
 }

@@ -96,13 +96,13 @@ export default {
     },
     upSuccess (response, file, fileList) {
       setTimeout(() => {
-        this.$Message.success('上传成功')
+        this.$Message.success($t('status.upload_success'))
         this.loading = false
       }, 2000)
     },
     upError (e) {
       setTimeout(() => {
-        this.$Message.error('上传失败')
+        this.$Message.error($t('status.upload_fail'))
         this.loading = false
       }, 2000)
     },

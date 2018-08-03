@@ -54,7 +54,12 @@
         "batch": "批次",
         "total": "总数",
         "create_time": "创建时间",
-        "setting": "设置"
+        "setting": "设置",
+        "login": "登录",
+        "sign_up": "注册",
+        "time": "时间",
+        "file_name": "文件名",
+        "chinese": "中文(简体)"
     },
     "tasks": {
         "dashboard":{
@@ -69,12 +74,17 @@
         "delete": "删除",
         "reject": "退回",
         "review": "查看",
+        "edit": "编辑",
         "finish": "完成",
         "add_image":"添加图片",
         "multi_file_upload": "多选文件上传",
         "upload_file": "文件上传",
         "set_training_paramter": "设置训练参数",
-        "upload_image": "上传图片"
+        "upload_image": "上传图片",
+        "operate": "操作",
+        "detail": "查看详情",
+        "resubmit": "重新提交",
+        "testing": "测试"
     },
     "auditing": {
         "data_review": "数据审核",
@@ -105,7 +115,9 @@
         "reason_for_rejected": "退回原因",
         "reject_to_be_labelled": "退回-待标注",
         "rejected_message": "请输入退回原因",
-        "success": "操作成功"
+        "success": "操作成功",
+        "upload_success": "上传成功",
+        "upload_fail": "上传失败"
     },
     "tagging": {
         "data_labeling": "数据标注",
@@ -119,6 +131,35 @@
         "detection": "检测",
         "segmentation": "分割",
         "classification": "分类",
-        "choose_model": "选择模型"
+        "choose_model": "选择模型",
+        "train_record": "训练记录"
+    },
+    "tips": {
+        "logged_in": "你已经登录。点击进控制台",
+        "relogin": "退出重新登录",
+        "input_name_or_email": "请输入用户名|邮箱地址",
+        "input_password": "请输入密码",
+        "forgot_password": "忘记密码？",
+        "input_name": "请输入用户名",
+        "input_email": "请输入邮箱",
+        "input_password_again": "请再次输入密码",
+        "input_registered_email": "请输入注册时的邮箱",
+        "inconsistent_password":"两次输入密码不一致",
+        "invalid_account": "账号不能为空",
+        "invalid_password": "密码不能为空",
+        "min_length": "请至少输入6个字符",
+        "max_length": "最多输入32个字符",
+        "login_success": "登录成功!",
+        "sign_up_success": "注册成功!",
+        "password_send_to_email": "密码已经发送到你的邮箱，请查收",
+        "gain_verification_code": "获取验证码",
+        "retry": "秒后重试",
+        "modify_success": "修改成功!",
+        "write_verification_code": "请填写短信验证码",
+        "verify_verification_code": "验证码正确",
+        "save_success": "保存成功!",
+        "cancel_tip":"您确定要删除这条数据吗?",
+        "invalid_group": "分组名不能为空",
+        "deleted": "已经删除"
     }
 }

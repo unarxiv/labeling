@@ -15,50 +15,6 @@
            </div>
         </div>
       </div>
-        <!-- <Header>
-            <Button type="info" @click="backPage" title="返回">
-                <Icon type="arrow-left-c"></Icon>
-            </Button>
-            <ButtonGroup>
-                <Button @click="getImage(-1)" title="上一张">
-                    <Icon type="chevron-left"></Icon>
-                </Button>
-                <Button @click="getImage(1)" title="下一张">
-                    <Icon type="chevron-right"></Icon>
-                </Button>
-            </ButtonGroup>
-            <ButtonGroup>
-                <Button @click="setScale(1)" title="放大">
-                    <Icon type="ios-plus-outline"></Icon>
-                </Button>
-                <Button @click="setScale(-1)" title="缩小">
-                    <Icon type="ios-minus-outline"></Icon>
-                </Button>
-                <Button @click="setScale(0)" title="取消缩放">
-                   <Icon type="arrow-expand"></Icon>
-                </Button>
-            </ButtonGroup>
-            <ButtonGroup>
-                <Button :type="type===1?'success':'default'" @click="setType(1)" title="矩形">
-                    <Icon type="ios-browsers-outline"></Icon>
-                </Button>
-                <Button :type="type===2?'success':'default'" @click="setType(2)" title="路径">
-                    <Icon type="compose"></Icon>
-                </Button>
-                <Button :type="type===3?'success':'default'" @click="setType(3)" title="自由路径">
-                   <Icon type="edit"></Icon>
-                </Button>
-            </ButtonGroup>
-            <ColorPicker v-model="color" recommend title="线框颜色"/>
-            <ButtonGroup>
-                <Button @click="reply" title="撤销" :disabled="!(type===2 && this.points.length>0)">
-                    <Icon type="reply"></Icon>
-                </Button>
-                <Button @click="forward" title="重做" :disabled="!(type===2 && this.pointsBack.length>0)">
-                    <Icon type="forward"></Icon>
-                </Button>
-            </ButtonGroup>
-        </Header> -->
         <Header>
           <div class="toolbar">
             <Tooltip content="上一张" placement="bottom">
