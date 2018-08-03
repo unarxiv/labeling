@@ -10,7 +10,7 @@
                       <div v-if="isLogin" class="form-con">
                         <Button @click="go('/index')" type="primary" long>{{userName}},{{ $t("tips.logged_in") }}</Button>
                         <br/> <br/>
-                        <Button @click="handleOut" type="text" long>{{ $t(tips.relogin) }}</Button>
+                        <Button @click="handleOut" type="text" long>{{ $t('tips.relogin') }}</Button>
                       </div>
                         <div v-else class="form-con" @keydown.enter="handleSubmit" >
                             <Form ref="loginForm" :model="form" :rules="rules">
@@ -69,7 +69,7 @@
                                     </Input>
                                 </FormItem>
                                 <FormItem>
-                                    <Button @click="handleRegSubmit" type="primary" long>{{ $t(menus.sign_up) }}</Button>
+                                    <Button @click="handleRegSubmit" type="primary" long>{{ $t('menus.sign_up') }}</Button>
                                 </FormItem>
                             </Form>
                         </div>
@@ -88,7 +88,7 @@
             </Form>
             <div slot="footer">
                 <Button type="text" @click="cancelForget">{{ $t("general.cancel") }}</Button>
-                <Button type="primary" :loading="forgetLoading" @click="submitForget">{{ $t(general.submit) }}</Button>
+                <Button type="primary" :loading="forgetLoading" @click="submitForget">{{ $t('general.submit') }}</Button>
             </div>
         </Modal>
     </div>
@@ -98,13 +98,11 @@
 import Cookies from 'js-cookie'
 import util from '../libs/util'
 import TopMenu from './main/topmenu'
-import i18n from '@/i18n'
-let $t = i18n.$t
 export default {
   data () {
     const valideRePassword = (rule, value, callback) => {
       if (value !== this.regForm.newPassWord) {
-        callback(new Error($t('tips.inconsistent_password')))
+        callback(new Error(this.$i18n.t('tips.inconsistent_password')))
       } else {
         callback()
       }
@@ -122,26 +120,26 @@ export default {
       },
       rules: {
         loginName: [
-          { required: true, message: $t('tips.invalid_account'), trigger: 'blur' }
+          { required: true, message: this.$i18n.t('tips.invalid_account'), trigger: 'blur' }
         ],
         password: [
-          { required: true, message: $t('tips.invalid_password'), trigger: 'blur' }
+          { required: true, message: this.$i18n.t('tips.invalid_password'), trigger: 'blur' }
         ]
       },
       regFormValidate: {
         loginName: [
-          { required: true, message: $t('tips.input_name'), trigger: 'blur' }
+          { required: true, message: this.$i18n.t('tips.input_name'), trigger: 'blur' }
         ],
         email: [
-          { type: 'email', required: true, message: $t('tips.input_email'), trigger: 'blur' }
+          { type: 'email', required: true, message: this.$i18n.t('tips.input_email'), trigger: 'blur' }
         ],
         oldPassWord: [
-          { required: true, message: $t('tips.input_password'), trigger: 'blur' },
-          { min: 6, message: $t('tips.min_length'), trigger: 'blur' },
-          { max: 32, message: $t('tips.max_length'), trigger: 'blur' }
+          { required: true, message: this.$i18n.t('tips.input_password'), trigger: 'blur' },
+          { min: 6, message: this.$i18n.t('tips.min_length'), trigger: 'blur' },
+          { max: 32, message: this.$i18n.t('tips.max_length'), trigger: 'blur' }
         ],
         newPassWord: [
-          { required: true, message: $t('tips.input_password_again'), trigger: 'blur' },
+          { required: true, message: this.$i18n.t('tips.input_password_again'), trigger: 'blur' },
           { validator: valideRePassword, trigger: 'blur' }
         ]
       },
@@ -152,7 +150,7 @@ export default {
       },
       forgetValidate: {
         email: [
-          { type: 'email', required: true, message: $t('tips.input_registered_email'), trigger: 'blur' }
+          { type: 'email', required: true, message: this.$i18n.t('tips.input_registered_email'), trigger: 'blur' }
         ]
       },
       emailError: '',
@@ -183,7 +181,7 @@ export default {
               Cookies.set('access', 1)
               localStorage.setItem('token', res.data.data.token)
 
-              this.$Message.success($t('tips.login_success'))
+              this.$Message.success(this.$i18n.t('tips.login_success'))
               this.$router.push({
                 name: 'home'
               })
@@ -199,7 +197,7 @@ export default {
           util.ajax.post('/user/register.do', this.regForm)
             .then((res) => {
               if (res.data.status) {
-                this.$Message.success($t('tips.sign_up_success'))
+                this.$Message.success(this.$i18n.t('tips.sign_up_success'))
                 this.currentTab = 'login'
                 this.form.loginName = this.regForm.loginName
                 this.regForm = {
@@ -236,7 +234,7 @@ export default {
               if (!res.data.status) {
                 this.emailError = res.data.errormsg
               } else {
-                this.$Message.success($t('tips.password_send_to_email'))
+                this.$Message.success(this.$i18n.t('tips.password_send_to_email'))
                 this.forget = false
               }
             }).catch((e) => {

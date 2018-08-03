@@ -50,48 +50,46 @@
 <script>
 import expandRow from './data-detail.vue'
 import util from '../../libs/util'
-import i18n from '@/i18n'
-let $t = i18n.$t
 export default {
   components: { expandRow },
   data () {
     return {
       columns: [
         {
-          title: this.$t('menus.number'),
+          title: this.$i18n.t('menus.number'),
           key: 'idTaskInfo'
         },
         {
-          title: this.$t('menus.group'),
+          title: this.$i18n.t('menus.group'),
           key: 'groupName'
         },
         {
-          title: this.$t('menus.batch'),
+          title: this.$i18n.t('menus.batch'),
           key: 'taskName'
         },
         {
-          title: this.$t('menus.audited'),
+          title: this.$i18n.t('menus.audited'),
           key: 'auditNum'
         },
         {
-          title: this.$t('status.to_be_audited'),
+          title: this.$i18n.t('status.to_be_audited'),
           key: 'unAuditNum'
         },
         {
-          title: this.$t('status.to_be_labelled'),
+          title: this.$i18n.t('status.to_be_labelled'),
           key: 'unSignNum'
         },
         {
-          title: this.$t('menus.total'),
+          title: this.$i18n.t('menus.total'),
           key: 'allNum'
         },
         {
-          title: this.$t('menus.create_time'),
+          title: this.$i18n.t('menus.create_time'),
           key: 'createdDate',
           width: 200
         },
         {
-          title: this.$t('menus.setting'),
+          title: this.$i18n.t('menus.setting'),
           key: 'action',
           width: 120,
           render: (h, params) => {
@@ -112,7 +110,7 @@ export default {
                   })
                 }
               }
-            }, $t('general.review')))
+            }, this.$i18n.t('general.review')))
 
             return h('div', buts)
           }
@@ -121,13 +119,13 @@ export default {
       data: [
       ],
       add: false,
-      addText: this.$t('tagging.create_batch'),
+      addText: this.$i18n.t('tagging.create_batch'),
       formValidate: {
         taskName: [
-          { required: true, message: this.$t('tagging.input_batch_name'), trigger: 'blur' }
+          { required: true, message: this.$i18n.t('tagging.input_batch_name'), trigger: 'blur' }
         ],
         idGroup: [
-          { required: true, message: this.$t('auditing.choose_group'), trigger: 'change' }
+          { required: true, message: this.$i18n.t('auditing.choose_group'), trigger: 'change' }
         ]
       },
       save_loading: false,
@@ -144,15 +142,15 @@ export default {
   methods: {
     showAdd () {
       this.add = true
-      this.addText = this.$t('auditing.create_group')
+      this.addText = this.$i18n.t('auditing.create_group')
     },
     showEdit () {
       this.add = true
-      this.addText = this.$t('auditing.edit_group')
+      this.addText = this.$i18n.t('auditing.edit_group')
     },
     saveAdd () {
       this.add = false
-      this.$Message.success(this.$t('auditing.create_success'))
+      this.$Message.success(this.$i18n.t('auditing.create_success'))
     },
     cancelAdd () {
       this.add = false

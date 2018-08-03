@@ -50,40 +50,40 @@ export default {
     return {
       columns: [
         {
-          title: $t('table.no'),
+          title: this.$i18n.t('table.no'),
           key: 'idTaskInfo'
         },
         {
-          title: $t('table.group'),
+          title: this.$i18n.t('table.group'),
           key: 'groupName'
         },
         {
-          title: $t('table.batch'),
+          title: this.$i18n.t('table.batch'),
           key: 'taskName'
         },
         {
-          title: $t('table.audited'),
+          title: this.$i18n.t('table.audited'),
           key: 'auditNum'
         },
         {
-          title: $t('table.need_audit'),
+          title: this.$i18n.t('table.need_audit'),
           key: 'unAuditNum'
         },
         {
-          title: $t('table.need_label'),
+          title: this.$i18n.t('table.need_label'),
           key: 'unSignNum'
         },
         {
-          title: $t('table.total'),
+          title: this.$i18n.t('table.total'),
           key: 'allNum'
         },
         {
-          title: $t('table.createdAt'),
+          title: this.$i18n.t('table.createdAt'),
           key: 'createdDate',
           width: 200
         },
         {
-          title: $t('table.operation'),
+          title: this.$i18n.t('table.operation'),
           key: 'action',
           width: 120,
           render: (h, params) => {
@@ -104,7 +104,7 @@ export default {
                   })
                 }
               }
-            }, $t('table.view')))
+            }, this.$i18n.t('table.view')))
 
             return h('div', buts)
           }
@@ -113,13 +113,13 @@ export default {
       data: [
       ],
       add: false,
-      addText: $t('tagging.create_batch'),
+      addText: this.$i18n.t('tagging.create_batch'),
       formValidate: {
         taskName: [
-          { required: true, message: $t('tagging.input_batch_name'), trigger: 'blur' }
+          { required: true, message: this.$i18n.t('tagging.input_batch_name'), trigger: 'blur' }
         ],
         idGroup: [
-          { required: true, message: $t('tagging.choose_group'), trigger: 'change' }
+          { required: true, message: this.$i18n.t('tagging.choose_group'), trigger: 'change' }
         ]
       },
       save_loading: false,
@@ -137,7 +137,7 @@ export default {
   methods: {
     showAdd () {
       this.add = true
-      this.addText = $t('tagging.create_batch')
+      this.addText = this.$i18n.t('tagging.create_batch')
       this.addForm = {
         taskName: '',
         idGroup: ''
@@ -145,17 +145,17 @@ export default {
     },
     showEdit () {
       this.add = true
-      this.addText = $t('tagging.edit_batch')
+      this.addText = this.$i18n.t('tagging.edit_batch')
     },
     saveAdd () {
       this.$refs.addForm.validate((valid) => {
         if (valid) {
           this.save_loading = true
-          util.ajax.post(this.addText === $t('tagging.edit_batch') ? '/userGroup/update.do' : '/sign/addTaskInfo.do', this.addForm).then(res => {
+          util.ajax.post(this.addText === this.$i18n.t('tagging.edit_batch') ? '/userGroup/update.do' : '/sign/addTaskInfo.do', this.addForm).then(res => {
             if (!res.data.status) {
               this.$Message.error(res.data.errormsg)
             } else {
-              this.$Message.success($t('tips.save_success'))
+              this.$Message.success(this.$i18n.t('tips.save_success'))
               this.add = false
               this.getData()
             }
