@@ -3,9 +3,9 @@
         <Card>
             <p slot="title" style="overflow: visible">
                 <Row>
-                    <Col span="20"><Icon type="ios-keypad"></Icon> 数据标注</Col>
+                    <Col span="20"><Icon type="ios-keypad"></Icon> {{$t('router.label')}}</Col>
                     <Col span="4" align="right">
-                    <Button type="ghost" shape="circle" icon="android-add" @click="showAdd">添加批次</Button>
+                    <Button type="ghost" shape="circle" icon="android-add" @click="showAdd">{{$t('tagging.create_batch')}}</Button>
                     </Col>
                 </Row>
             </p>
@@ -22,19 +22,19 @@
         <Modal v-model="add" :closable='false' :mask-closable=false :width="400">
             <h3 slot="header" style="color:#2D8CF0">{{addText}}</h3>
             <Form ref="addForm" :model="addForm" label-position="right" :rules="formValidate" :label-width="80">
-                <FormItem label="批次名" prop="taskName">
-                    <Input v-model="addForm.taskName" placeholder="请输入批次名"></Input>
+                <FormItem :label="$t('tagging.batch_name')" prop="taskName">
+                    <Input v-model="addForm.taskName" :placeholder="$t('tagging.input_batch_name')"/>
                 </FormItem>
-                <FormItem label="所属分组" prop="idGroup">
-                    <Select v-model="addForm.idGroup" placeholder="选择分组" @on-change="groupChange">
+                <FormItem :label="$t('tagging.belongs_to')"  prop="idGroup">
+                    <Select v-model="addForm.idGroup" :placeholder="$t('tagging.choose_group')" @on-change="groupChange">
                         <Option v-for="(item,key) in groups" :value="item.idGroup+''" :key="key" :label="item.name">{{item.name}}</Option>
-                        <Option :value="0" key="" label="" style="text-align:center">--- 添加新分组 ---</Option>
+                        <Option :value="0" key="" label="" style="text-align:center">--- {{$t('auditing.add_group')}} ---</Option>
                     </Select>
                 </FormItem>
             </Form>
             <div slot="footer">
-                <Button type="text" @click="cancelAdd">取消</Button>
-                <Button type="primary" :loading="save_loading" @click="saveAdd">提交</Button>
+                <Button type="text" @click="cancelAdd">{{$t('general.cancel')}}</Button>
+                <Button type="primary" :loading="save_loading" @click="saveAdd">{{$t('general.submit')}}</Button>
             </div>
         </Modal>
     </div>
@@ -42,46 +42,48 @@
 <script>
 import expandRow from './data-detail.vue'
 import util from '../../libs/util'
+import i18n from '@/i18n'
+let $t = i18n.$t
 export default {
   components: { expandRow },
   data () {
     return {
       columns: [
         {
-          title: '编号',
+          title: $t('table.no'),
           key: 'idTaskInfo'
         },
         {
-          title: '分组',
+          title: $t('table.group'),
           key: 'groupName'
         },
         {
-          title: '批次',
+          title: $t('table.batch'),
           key: 'taskName'
         },
         {
-          title: '已审核',
+          title: $t('table.audited'),
           key: 'auditNum'
         },
         {
-          title: '待审核',
+          title: $t('table.need_audit'),
           key: 'unAuditNum'
         },
         {
-          title: '待标注',
+          title: $t('table.need_label'),
           key: 'unSignNum'
         },
         {
-          title: '总数',
+          title: $t('table.total'),
           key: 'allNum'
         },
         {
-          title: '创建时间',
+          title: $t('table.createdAt'),
           key: 'createdDate',
           width: 200
         },
         {
-          title: '设置',
+          title: $t('table.operation'),
           key: 'action',
           width: 120,
           render: (h, params) => {
@@ -102,7 +104,7 @@ export default {
                   })
                 }
               }
-            }, '查看'))
+            }, $t('table.view')))
 
             return h('div', buts)
           }
@@ -111,13 +113,13 @@ export default {
       data: [
       ],
       add: false,
-      addText: '创建批次',
+      addText: $t('tagging.create_batch'),
       formValidate: {
         taskName: [
-          { required: true, message: '请填写批次名', trigger: 'blur' }
+          { required: true, message: $t('tagging.input_batch_name'), trigger: 'blur' }
         ],
         idGroup: [
-          { required: true, message: '请选择分组', trigger: 'change' }
+          { required: true, message: $t('tagging.choose_group'), trigger: 'change' }
         ]
       },
       save_loading: false,
@@ -135,7 +137,7 @@ export default {
   methods: {
     showAdd () {
       this.add = true
-      this.addText = '创建批次'
+      this.addText = $t('tagging.create_batch')
       this.addForm = {
         taskName: '',
         idGroup: ''
@@ -143,17 +145,17 @@ export default {
     },
     showEdit () {
       this.add = true
-      this.addText = '编辑批次'
+      this.addText = $t('tagging.edit_batch')
     },
     saveAdd () {
       this.$refs.addForm.validate((valid) => {
         if (valid) {
           this.save_loading = true
-          util.ajax.post(this.addText === '编辑批次' ? '/userGroup/update.do' : '/sign/addTaskInfo.do', this.addForm).then(res => {
+          util.ajax.post(this.addText === $t('tagging.edit_batch') ? '/userGroup/update.do' : '/sign/addTaskInfo.do', this.addForm).then(res => {
             if (!res.data.status) {
               this.$Message.error(res.data.errormsg)
             } else {
-              this.$Message.success('保存成功！')
+              this.$Message.success($t('tips.save_success'))
               this.add = false
               this.getData()
             }

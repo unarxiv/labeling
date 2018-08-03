@@ -18,9 +18,9 @@ export const router = new VueRouter(RouterConfig)
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()
   const curRouterObj = Util.getRouterObjByName([otherRouter, ...appRouter], to.name)
-  if (curRouterObj && Cookies.get('user')) { // 需要判断权限的路由
+  if (curRouterObj && Cookies.get('user')) { 
     Util.toDefaultPage([otherRouter, ...appRouter], to.name, router, next)
-  } else { // 没有配置权限的路由, 直接通过
+  } else { 
     Util.toDefaultPage([...routers], to.name, router, next)
   }
 })

@@ -4,8 +4,7 @@
             <p slot="title" style="overflow: visible">
                 <Row>
                     <Col span="20"><Icon type="ios-keypad"></Icon> {{ $t("training.model_training") }}</Col>
-                    <Col span="4" align="right">
-                    </Col>
+                    <Col span="4" align="right"/>
                 </Row>
             </p>
             <Row>
@@ -23,46 +22,48 @@
 <script>
 import expandRow from './data-detail.vue'
 import util from '../../libs/util'
+import i18n from '@/i18n'
+let $t = i18n.$t
 export default {
   components: { expandRow },
   data () {
     return {
       columns: [
         {
-          title: '编号',
+          title: $t('table.no'),
           key: 'idTaskInfo'
         },
         {
-          title: '分组',
+          title: $t('table.group'),
           key: 'groupName'
         },
         {
-          title: '批次',
+          title: $t('table.batch'),
           key: 'taskName'
         },
         {
-          title: '已审核',
+          title: $t('table.audited'),
           key: 'auditNum'
         },
         {
-          title: '待审核',
+          title: $t('table.need_audit'),
           key: 'unAuditNum'
         },
         {
-          title: '待标注',
+          title: $t('table.need_label'),
           key: 'unSignNum'
         },
         {
-          title: '总数',
+          title: $t('table.total'),
           key: 'allNum'
         },
         {
-          title: '创建时间',
+          title: $t('table.createdAt'),
           key: 'createdDate',
           width: 200
         },
         {
-          title: '操作',
+          title: $t('table.operation'),
           key: 'action',
           width: 260,
           render: (h, params) => {
@@ -83,7 +84,7 @@ export default {
                   })
                 }
               }
-            }, '去提交训练'))
+            }, $t('table.submit_train')))
 
             buts.push(h('Button', {
               props: {
@@ -100,7 +101,7 @@ export default {
                   })
                 }
               }
-            }, '训练记录'))
+            }, $t('table.train_record')))
 
             return h('div', buts)
           }

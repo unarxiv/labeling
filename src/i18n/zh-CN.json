@@ -1,18 +1,24 @@
 {
     "topmenu": {
-        "product_service":"产品服务",
-        "solutions":"解决方案",
-        "use_cases":"使用案例",
+        "product_service": "产品服务",
+        "solutions": "解决方案",
+        "use_cases": "使用案例",
         "development": "开发资源",
-        "cooperations":"合作伙伴"
+        "cooperations": "合作伙伴",
+        "console": "控制台",
+        "quit": "退出"
     },
     "router": {
-        "label_tool":"标注工具",
-        "label":"数据标注",
-        "data_audit":"数据审核",
-        "train":"模型训练",
-        "group_manage":"分组管理",
-        "account_manage":"账户管理"
+        "label_tool": "标注工具",
+        "label": "数据标注",
+        "data_audit": "数据审核",
+        "train": "模型训练",
+        "group_manage": "分组管理",
+        "account_manage": "账户管理",
+        "project": "项目",
+        "submit_training": "提交训练",
+        "train_log": "训练日志",
+        "train_record": "训练记录"
     },
     "settings": {
         "general": {
@@ -27,7 +33,8 @@
             "username": "用户名",
             "password": "密码",
             "email": "邮箱",
-            "language": "语言"
+            "language": "语言",
+            "login_password": "登录密码"
         },
         "personal_information": "个人信息",
         "change_password": "修改密码",
@@ -68,10 +75,12 @@
         }
     },
     "general": {
+        "label": "标记",
         "save": "保存",
         "cancel": "取消",
         "submit": "提交",
         "delete": "删除",
+        "confirm":"确定",
         "reject": "退回",
         "review": "查看",
         "edit": "编辑",
@@ -85,6 +94,20 @@
         "detail": "查看详情",
         "resubmit": "重新提交",
         "testing": "测试"
+    },
+    "table": {
+        "no":"编号",
+        "group":"分组",
+        "batch":"批次",
+        "audited":"已审核",
+        "need_audit":"待审核",
+        "need_label":"待标注",
+        "total":"总数",
+        "createdAt":"创建时间",
+        "operation":"操作",
+        "submit_train":"提交训练",
+        "train_record": "训练记录",
+        "view": "查看"
     },
     "auditing": {
         "data_review": "数据审核",
@@ -101,7 +124,8 @@
         "name_or_email": "用户名或者邮箱",
         "upload": "上传人员",
         "audit": "审核人员",
-        "create": "创建人员"
+        "create": "创建人员",
+        "reject_reason":"退回原因"
     },
     "status": {
         "to_be_labelled": "待标注",
@@ -122,7 +146,11 @@
     "tagging": {
         "data_labeling": "数据标注",
         "create_batch": "创建批次",
-        "input_batch_name": "请填写批次名"
+        "input_batch_name": "请填写批次名",
+        "choose_group":"请选择分组",
+        "edit_batch": "编辑批次",
+        "batch_name": "批次名",
+        "belongs_to": "所属分组"
     },
     "training": {
         "model_training": "模型训练",
@@ -132,7 +160,8 @@
         "segmentation": "分割",
         "classification": "分类",
         "choose_model": "选择模型",
-        "train_record": "训练记录"
+        "train_record": "训练记录",
+        "log": "训练日志"
     },
     "tips": {
         "logged_in": "你已经登录。点击进控制台",
@@ -161,5 +190,12 @@
         "cancel_tip":"您确定要删除这条数据吗?",
         "invalid_group": "分组名不能为空",
         "deleted": "已经删除"
+    },
+    "tool": {
+        "prev":"上一张",
+        "next":"后一张",
+        "zoom_out":"放大",
+        "zoom_in":"缩小",
+        "auto_fit":"最合适"
     }
 }

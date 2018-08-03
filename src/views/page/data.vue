@@ -77,6 +77,8 @@
 <script>
 import expandRow from './data-detail.vue'
 import util from '../../libs/util'
+import i18n from '@/i18n'
+let $t = i18n.$t
 export default {
   components: { expandRow },
   data () {
@@ -94,15 +96,15 @@ export default {
           }
         },
         {
-          title: $t("menus.group"),
+          title: $t('menus.group'),
           key: 'name'
         },
         {
-          title: $t("menus.create_time"),
+          title: $t('menus.create_time'),
           key: 'createdDate'
         },
         {
-          title: $t("menus.setting"),
+          title: $t('menus.setting'),
           key: 'action',
           width: 160,
           render: (h, params) => {
@@ -118,7 +120,7 @@ export default {
                   this.$router.push('/tagging/index')
                 }
               }
-            }, $t("general.review")))
+            }, $t('general.review')))
             // if (row.status === '1') {
             buts.push(h('Button', {
               props: {
@@ -156,11 +158,11 @@ export default {
                   this.showEdit()
                 }
               }
-            }, $t("general.edit")))
+            }, $t('general.edit')))
             buts.push(h('Poptip', {
               props: {
                 confirm: true,
-                title: $t("tips.cancel_tip"),
+                title: $t('tips.cancel_tip'),
                 transfer: true
               },
               on: {
@@ -180,7 +182,7 @@ export default {
                   placement: 'top',
                   size: 'small'
                 }
-              }, $t("general.delete"))
+              }, $t('general.delete'))
             ]))
             // }
 
@@ -190,10 +192,10 @@ export default {
       ],
       data: [],
       add: false,
-      addText: $t("auditing.create_group"),
+      addText: $t('auditing.create_group'),
       formValidate: {
         groupName: [
-          { required: true, message: $t("tips.invalid_group"), trigger: 'blur' }
+          { required: true, message: $t('tips.invalid_group'), trigger: 'blur' }
         ]
       },
       save_loading: false,
@@ -217,7 +219,7 @@ export default {
   methods: {
     showAdd () {
       this.add = true
-      this.addText = $t("auditing.create_group")
+      this.addText = $t('auditing.create_group')
       this.form = {
         groupName: '',
         uploadMember: [],
@@ -227,17 +229,17 @@ export default {
     },
     showEdit () {
       this.add = true
-      this.addText = $t("auditing.edit_group")
+      this.addText = $t('auditing.edit_group')
     },
     saveAdd () {
       this.save_loading = true
       this.$refs.addForm.validate((valid) => {
         if (valid) {
-          util.ajax.post(this.addText === $t("auditing.edit_group") ? '/userGroup/update.do' : '/userGroup/save.do', this.form).then(res => {
+          util.ajax.post(this.addText === $t('auditing.edit_group') ? '/userGroup/update.do' : '/userGroup/save.do', this.form).then(res => {
             if (!res.data.status) {
               this.$Message.error(res.data.errormsg)
             } else {
-              this.$Message.success($t("tips.save_success"))
+              this.$Message.success($t('tips.save_success'))
               this.add = false
               this.getData()
             }
@@ -300,7 +302,7 @@ export default {
         if (!res.data.status) {
           this.$Message.error(res.data.errormsg)
         } else {
-          this.$Message.success($t("tips.deleted"))
+          this.$Message.success($t('tips.deleted'))
         }
       })
     }

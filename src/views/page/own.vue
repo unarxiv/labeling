@@ -64,12 +64,14 @@
 <script>
 import util from '../../libs/util'
 import { getLang, setLang } from '@/i18n/config'
+import i18n from '@/i18n'
+let $t = i18n.$t
 export default {
   name: 'ownspace_index',
   data () {
     const valideRePassword = (rule, value, callback) => {
       if (value !== this.editPasswordForm.newPass) {
-        callback(new Error($t("tips.inconsistent_password")))
+        callback(new Error($t('tips.inconsistent_password')))
       } else {
         callback()
       }
@@ -83,7 +85,7 @@ export default {
       selected_language: getLang(),
       languages: [
         'English',
-        $t("menus.chinese"),
+        $t('menus.chinese'),
         'Deutschland'
       ],
       uid: '', // 登录用户的userId
@@ -100,7 +102,7 @@ export default {
       checkIdentifyCodeLoading: false,
       inforValidate: {
         email: [
-          { type: 'email', required: true, message: $t("tips.input_email"), trigger: 'blur' }
+          { type: 'email', required: true, message: $t('tips.input_email'), trigger: 'blur' }
         ]
       },
       editPasswordForm: {
@@ -110,21 +112,21 @@ export default {
       },
       passwordValidate: {
         oldPass: [
-          { required: true, message: $t("settings.input_original_password"), trigger: 'blur' }
+          { required: true, message: $t('settings.input_original_password'), trigger: 'blur' }
         ],
         newPass: [
-          { required: true, message: $t("settings.input_new_passoword"), trigger: 'blur' },
-          { min: 6, message: $t("tips.min_length"), trigger: 'blur' },
-          { max: 32, message: $t("tips.max_length"), trigger: 'blur' }
+          { required: true, message: $t('settings.input_new_passoword'), trigger: 'blur' },
+          { min: 6, message: $t('tips.min_length'), trigger: 'blur' },
+          { max: 32, message: $t('tips.max_length'), trigger: 'blur' }
         ],
         rePass: [
-          { required: true, message: $t("settings.input_new_password_again"), trigger: 'blur' },
+          { required: true, message: $t('settings.input_new_password_again'), trigger: 'blur' },
           { validator: valideRePassword, trigger: 'blur' }
         ]
       },
       inputCodeVisible: false, // 显示填写验证码box
       initPhone: '',
-      gettingIdentifyCodeBtnContent: $t("tips.gain_verification_code") // “获取验证码”按钮的文字
+      gettingIdentifyCodeBtnContent: $t('tips.gain_verification_code') // “获取验证码”按钮的文字
     }
   },
   methods: {
@@ -136,11 +138,11 @@ export default {
           let timeLast = 60
           let timer = setInterval(() => {
             if (timeLast >= 0) {
-              this.gettingIdentifyCodeBtnContent = timeLast + $t("tips.retry")
+              this.gettingIdentifyCodeBtnContent = timeLast + $t('tips.retry')
               timeLast -= 1
             } else {
               clearInterval(timer)
-              this.gettingIdentifyCodeBtnContent = $t("tips.gain_verification_code")
+              this.gettingIdentifyCodeBtnContent = $t('tips.gain_verification_code')
               this.canGetIdentifyCode = false
             }
           }, 1000)
@@ -189,7 +191,7 @@ export default {
             if (!res.data.status) {
               this.$Message.error(res.data.errormsg)
             } else {
-              this.$Message.success($t("tips.modify_success"))
+              this.$Message.success($t('tips.modify_success'))
               this.editPasswordModal = false
             }
           })
@@ -213,10 +215,10 @@ export default {
       let vm = this
       vm.checkIdentifyCodeLoading = true
       if (this.securityCode.length === 0) {
-        this.$Message.error($t("tips.write_verification_code"))
+        this.$Message.error($t('tips.write_verification_code'))
       } else {
         setTimeout(() => {
-          this.$Message.success($t("tips.verify_verification_code"))
+          this.$Message.success($t('tips.verify_verification_code'))
           this.inputCodeVisible = false
           this.checkIdentifyCodeLoading = false
         }, 1000)
@@ -234,7 +236,7 @@ export default {
         if (!res.data.status) {
           this.$Message.error(res.data.errormsg)
         } else {
-          this.$Message.success($t("tips.save_success"))
+          this.$Message.success($t('tips.save_success'))
         }
       })
     }

@@ -6,7 +6,7 @@
          <div class="ivu-col">
            <p style="overflow: visible;">
             <Row>
-                <Col span="20"><Icon type="ios-keypad"></Icon> 标记{{fileName}}</Col>
+                <Col span="20"><Icon type="ios-keypad"></Icon> {{$t('general.label')}}-{{fileName}}</Col>
                 <Col span="4" align="right">
                   <Button type="primary" shape="circle" icon="android-add" @click="changeType(2)" v-if="listType==='tagging'">提交审批</Button>
                 </Col>
@@ -17,19 +17,19 @@
       </div>
         <Header>
           <div class="toolbar">
-            <Tooltip content="上一张" placement="bottom">
+            <Tooltip :content="$t('tool.prev')" placement="bottom">
               <button class="pre" @click="goPage(-1)"></button>
             </Tooltip>
-            <Tooltip content="后一张" placement="bottom">
+            <Tooltip content="$t('tool.next')" placement="bottom">
               <button class="next" @click="goPage(1)"></button>
             </Tooltip>
-            <Tooltip content="放大" placement="bottom">
+            <Tooltip :content="$t('tool.zoom_out')" placement="bottom">
               <button class="enlarge" @click="setScale(1)"></button>
             </Tooltip>
-            <Tooltip content="缩小" placement="bottom">
+            <Tooltip :content="$t('tool.zoom_in')" placement="bottom">
               <button class="narrow" @click="setScale(-1)"></button>
             </Tooltip>
-            <Tooltip content="最合适" placement="bottom">
+            <Tooltip :content="$t('tool.auto_fit')" placement="bottom">
               <button class="appropriate" @click="setScale(0)"></button>
             </Tooltip>
             <Tooltip content="矩形标注" placement="bottom">
@@ -99,23 +99,14 @@
                     <Option v-for="(option, index) in remoteList" :value="option.name" :key="index" @click.native="remoteChange(option.idLabelInfo)">{{option.name}}</Option>
                 </AutoComplete>
             </FormItem>
-            <!-- <FormItem label="闭塞">
-                <RadioGroup v-model="formItem.radio">
-                    <Radio label="yes">是</Radio>
-                    <Radio label="no">否</Radio>
-                </RadioGroup>
-            </FormItem> -->
             <FormItem label="描述" prop="desc">
                 <Input v-model="formItem.desc" type="textarea" :autosize="{minRows: 3,maxRows: 3}" placeholder="Enter attributes..."></Input>
             </FormItem>
-            <!-- <FormItem label="边框">
-                <ColorPicker v-model="formItem.color" />
-            </FormItem> -->
         </Form>
         <div slot="footer">
-            <Button type="text" size="small" @click="cancel">取消</Button>
-            <Button type="warning" size="small" @click="deleteNode">删除</Button>
-            <Button type="primary" size="small" @click="confirm">确定</Button>
+            <Button type="text" size="small" @click="cancel">{{$t('general.cancel')}}</Button>
+            <Button type="warning" size="small" @click="deleteNode">{{$t('general.delete')}}</Button>
+            <Button type="primary" size="small" @click="confirm">{{$t('general.confirm')}}</Button>
         </div>
     </Modal>
 </div>

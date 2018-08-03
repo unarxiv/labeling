@@ -34,6 +34,8 @@
 <script>
 import util from '../../libs/util'
 import { detect, getInferenceEndpoint } from '@/libs/service'
+import i18n from '@/i18n'
+let $t = i18n.$t
 export default {
   components: {
   },

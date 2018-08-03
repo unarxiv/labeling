@@ -22,22 +22,22 @@
             <h3 slot="header" style="color:#2D8CF0">{{addText}}</h3>
             <Form ref="addForm" label-position="right" :rules="formValidate">
                 <FormItem :label="$t('auditing.group_name')" prop="name">
-                    <Input :placeholder="$t('auditing.input_group_name')" style="width:60%"></Input>
+                    <Input :placeholder="$t('auditing.input_group_name')" style="width:60%"/>
                 </FormItem>
             </Form>
             <Form ref="addForm" label-position="right" :rules="formValidate">
                 <FormItem :label="$t('auditing.label')" prop="name">
-                    <Input :placeholder="$t('auditing.input_account_or_email')"></Input>
+                    <Input :placeholder="$t('auditing.input_account_or_email')"/>
                 </FormItem>
             </Form>
             <Form ref="addForm" label-position="right" :rules="formValidate">
                 <FormItem :label="$t('auditing.upload')" prop="name">
-                    <Input :placeholder="$t('auditing.input_account_or_email')"></Input>
+                    <Input :placeholder="$t('auditing.input_account_or_email')"/>
                 </FormItem>
             </Form>
             <Form ref="addForm" label-position="right" :rules="formValidate">
                 <FormItem :label="$t('auditing.audit')" prop="name">
-                    <Input :placeholder="$t('auditing.input_account_or_email')"></Input>
+                    <Input :placeholder="$t('auditing.input_account_or_email')"/>
                 </FormItem>
             </Form>
             <div slot="footer">
@@ -50,6 +50,8 @@
 <script>
 import expandRow from './data-detail.vue'
 import util from '../../libs/util'
+import i18n from '@/i18n'
+let $t = i18n.$t
 export default {
   components: { expandRow },
   data () {
@@ -110,7 +112,7 @@ export default {
                   })
                 }
               }
-            }, '查看'))
+            }, $t('general.review')))
 
             return h('div', buts)
           }

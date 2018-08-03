@@ -23,10 +23,10 @@
         <div class="layout-console" v-if="isLogin">
             <Avatar icon="person" size="small" style="background-color: #495060; color:rgba(255,255,255,.5)"/><span> {{userName}},</span>
             <Button type="text" @click="go('/index')" size="small">
-                <span>控制台</span>
+                <span>{{$t('topmenu.console')}}</span>
             </Button>
             <Button type="text" @click="loginout" size="small">
-                <span>退出</span>
+                <span>{{$t('topmenu.quit')}}</span>
             </Button>
         </div>
 
