@@ -11,8 +11,8 @@ export const otherRouter = {
   name: 'otherRouter',
   component: Main,
   children: [
-    { path: 'index', title: '控制台', name: 'home', component: () => import('@/views/page/home') },
-    { path: 'item/:type/:id', title: '项目', name: 'item-info', component: () => import('@/views/page/items') },
+    { path: 'index', title: i18n.t('topmenu.console'), name: 'home', component: () => import('@/views/page/home') },
+    { path: 'item/:type/:id', title: i18n.t('router.project'), name: 'item-info', component: () => import('@/views/page/items') },
     {
       path: '/tools/:type/:id',
       title: i18n.t('router.label_tool'),
@@ -22,25 +22,25 @@ export const otherRouter = {
     },
     {
       path: '/train/:id',
-      title: '提交训练',
+      title: i18n.t('router.submit_training'),
       name: 'train',
       component: () => import('@/views/page/train-send')
     },
     {
       path: '/trainTest/:id',
-      title: '提交训练',
+      title: i18n.t('router.submit_training'),
       name: 'trainTest',
       component: () => import('@/views/page/train-test')
     },
     {
       path: '/trainlog/:id',
-      title: '训练日志',
+      title: i18n.t('router.train_log'),
       name: 'trainlog',
       component: () => import('@/views/page/train-log')
     },
     {
       path: '/trainlist/:id',
-      title: '训练记录',
+      title: i18n.t('router.train_record'),
       name: 'trainlist',
       component: () => import('@/views/page/train-list')
     }
@@ -55,7 +55,7 @@ export const appRouter = [
     title: i18n.t('router.label'),
     component: Main,
     children: [
-      { path: 'index', title: '数据标注', name: 'page-tagging', component: () => import('@/views/page/tagging') }
+      { path: 'index', title: i18n.t('router.label'), name: 'page-tagging', component: () => import('@/views/page/tagging') }
     ]
   },
   {
@@ -65,7 +65,7 @@ export const appRouter = [
     title: i18n.t('router.data_audit'),
     component: Main,
     children: [
-      { path: 'index', title: '数据审核', name: 'page-auditing', component: () => import('@/views/page/auditing') }
+      { path: 'index', title: i18n.t('router.data_audit'), name: 'page-auditing', component: () => import('@/views/page/auditing') }
     ]
   },
   {
@@ -75,7 +75,7 @@ export const appRouter = [
     title: i18n.t('router.train'),
     component: Main,
     children: [
-      { path: 'index', title: '模型训练', name: 'page-training', component: () => import('@/views/page/training') }
+      { path: 'index', title: i18n.t('router.train'), name: 'page-training', component: () => import('@/views/page/training') }
     ]
   },
   {
@@ -85,7 +85,7 @@ export const appRouter = [
     title: i18n.t('router.group_manage'),
     component: Main,
     children: [
-      { path: 'index', title: '分组管理', name: 'page-data', component: () => import('@/views/page/data') }
+      { path: 'index', title: i18n.t('router.group_manage'), name: 'page-data', component: () => import('@/views/page/data') }
     ]
   },
   {
@@ -95,7 +95,7 @@ export const appRouter = [
     title: i18n.t('router.account_manage'),
     component: Main,
     children: [
-      { path: 'index', title: '账户管理', name: 'page-accounts', component: () => import('@/views/page/own.vue') }
+      { path: 'index', title: i18n.t('router.account_manage'), name: 'page-accounts', component: () => import('@/views/page/own.vue') }
     ]
   }
 ]

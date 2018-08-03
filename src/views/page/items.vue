@@ -62,12 +62,6 @@
         <Modal v-model="add" :closable='false' :mask-closable=false :width="600">
             <h3 slot="header" style="color:#2D8CF0">{{ $t("general.add_image") }}</h3>
             <Form ref="addForm" label-position="right" :label-width="80">
-                <!-- <FormItem label="上传类型">
-                    <Select>
-                        <Option value="beijing">图片</Option>
-                        <Option value="shanghai">压缩包</Option>
-                    </Select>
-                </FormItem> -->
                 <Upload multiple :action="uploadURL" with-credentials name="pic" :data="formData">
                         <span>{{ $t("general.multi_file_upload") }}&nbsp;&nbsp;</span>
                         <Button type="ghost" icon="ios-cloud-upload-outline">{{ $t("general.upload_file") }}</Button>
@@ -81,7 +75,7 @@
         <Modal v-model="back">
             <h3 slot="header" style="color:#2D8CF0">{{ $t("general.reject") }}</h3>
             <Form ref="backForm" :model="backForm" label-position="right" :label-width="80" :rules="backFormRule">
-                <FormItem label="退回原因" prop="auditMsg">
+                <FormItem :label='$t("general.add_image")' prop="auditMsg">
                    <Input v-model="backForm.auditMsg" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
                 </FormItem>
             </Form>

@@ -3,7 +3,7 @@
         <Card>
             <p slot="title" style="overflow: visible">
                 <Row>
-                    <Col span="20"><Icon type="ios-keypad"></Icon> {{groupName}} - {{taskName}} 训练日志</Col>
+                    <Col span="20"><Icon type="ios-keypad"></Icon> {{groupName}} - {{taskName}} {{$t('training.log')}}</Col>
                     <Col span="4" align="right"></Col>
                 </Row>
             </p>

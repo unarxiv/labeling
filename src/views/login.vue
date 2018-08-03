@@ -6,70 +6,70 @@
         <div class="login-con">
             <Card :bordered="false">
                 <Tabs v-model="currentTab">
-                    <TabPane label="登录" name="login">
+                    <TabPane :label="$t('menus.login')" name="login">
                       <div v-if="isLogin" class="form-con">
-                        <Button @click="go('/index')" type="primary" long>{{userName}},你已经登录。点击进控制台</Button>
+                        <Button @click="go('/index')" type="primary" long>{{userName}},{{ $t("tips.logged_in") }}</Button>
                         <br/> <br/>
-                        <Button @click="handleOut" type="text" long>退出重新登录</Button>
+                        <Button @click="handleOut" type="text" long>{{ $t(tips.relogin) }}</Button>
                       </div>
                         <div v-else class="form-con" @keydown.enter="handleSubmit" >
                             <Form ref="loginForm" :model="form" :rules="rules">
                                 <FormItem prop="loginName">
-                                    <Input v-model="form.loginName" placeholder="请输入用户名|邮箱地址">
+                                    <Input v-model="form.loginName" :placeholder="$t('tips.input_name_or_email')">
                                         <!-- <span slot="prepend">
                                             <Icon :size="16" type="person"></Icon>
                                         </span> -->
                                     </Input>
                                 </FormItem>
                                 <FormItem prop="password">
-                                    <Input type="password" v-model="form.password" placeholder="请输入密码">
+                                    <Input type="password" v-model="form.password" :placeholder="$t('tips.input_password')">
                                         <!-- <span slot="prepend">
                                             <Icon :size="14" type="locked"></Icon>
                                         </span> -->
                                     </Input>
                                 </FormItem>
                                 <p :style="{'text-align':'right'}">
-                                    <Button @click="showForget" type="text">忘记密码？</Button>
+                                    <Button @click="showForget" type="text">{{ $t('tips.forgot_password') }}</Button>
                                 </p>
                                 <FormItem>
-                                    <Button @click="handleSubmit" type="primary" long>登录</Button>
+                                    <Button @click="handleSubmit" type="primary" long>{{ $t("menus.login") }}</Button>
                                 </FormItem>
                             </Form>
                         </div>
                     </TabPane>
-                    <TabPane label="注册" name="reg">
+                    <TabPane :label="$t('menus.sign_up')" name="reg">
                         <div class="form-con">
                             <Form ref="regForm" :model="regForm" :rules="regFormValidate">
                                 <FormItem prop="loginName">
-                                    <Input v-model="regForm.loginName" placeholder="请输入用户名">
+                                    <Input v-model="regForm.loginName" :placeholder="$t('tips.input_name')">
                                         <!-- <span slot="prepend">
                                             <Icon :size="16" type="person"></Icon>
                                         </span> -->
                                     </Input>
                                 </FormItem>
                                 <FormItem prop="email">
-                                    <Input v-model="regForm.email" placeholder="请输入邮箱">
+                                    <Input v-model="regForm.email" :placeholder="$t('tips.input_email')">
                                         <!-- <span slot="prepend">
                                             <Icon :size="16" type="email"></Icon>
                                         </span> -->
                                     </Input>
                                 </FormItem>
                                 <FormItem prop="oldPassWord">
-                                    <Input type="password" v-model="regForm.oldPassWord" placeholder="请输入密码">
+                                    <Input type="password" v-model="regForm.oldPassWord" :placeholder="$t('tips.input_password')">
                                         <!-- <span slot="prepend">
                                             <Icon :size="14" type="locked"></Icon>
                                         </span> -->
                                     </Input>
                                 </FormItem>
                                 <FormItem prop="newPassWord">
-                                    <Input type="password" v-model="regForm.newPassWord" placeholder="请再次输入密码">
+                                    <Input type="password" v-model="regForm.newPassWord" :placeholder="$t('tips.input_password_again')">
                                         <!-- <span slot="prepend">
                                             <Icon :size="14" type="locked"></Icon>
                                         </span> -->
                                     </Input>
                                 </FormItem>
                                 <FormItem>
-                                    <Button @click="handleRegSubmit" type="primary" long>注册</Button>
+                                    <Button @click="handleRegSubmit" type="primary" long>{{ $t(menus.sign_up) }}</Button>
                                 </FormItem>
                             </Form>
                         </div>
@@ -79,16 +79,16 @@
             </Card>
         </div>
         <Modal v-model="forget" :closable='false' :mask-closable=false :width="400">
-            <h3 slot="header" style="color:#2D8CF0">找回密码</h3>
+            <h3 slot="header" style="color:#2D8CF0">{{ $t("tips.forgot_password") }}</h3>
             <Form ref="forgetForm" :model="forgetForm" :label-width="60" label-position="right"
              :rules="forgetValidate">
-                <FormItem label="邮箱" prop="email" :error="emailError">
-                    <Input v-model="forgetForm.email" placeholder="请输入注册时的邮箱" ></Input>
+                <FormItem :label="$t('userForm.email')" prop="email" :error="emailError">
+                    <Input v-model="forgetForm.email" :placeholder="$t('tips.input_registered_email')" ></Input>
                 </FormItem>
             </Form>
             <div slot="footer">
-                <Button type="text" @click="cancelForget">取消</Button>
-                <Button type="primary" :loading="forgetLoading" @click="submitForget">提交</Button>
+                <Button type="text" @click="cancelForget">{{ $t("general.cancel") }}</Button>
+                <Button type="primary" :loading="forgetLoading" @click="submitForget">{{ $t(general.submit) }}</Button>
             </div>
         </Modal>
     </div>
@@ -98,12 +98,13 @@
 import Cookies from 'js-cookie'
 import util from '../libs/util'
 import TopMenu from './main/topmenu'
-
+import i18n from '@/i18n'
+let $t = i18n.$t
 export default {
   data () {
     const valideRePassword = (rule, value, callback) => {
       if (value !== this.regForm.newPassWord) {
-        callback(new Error('两次输入密码不一致'))
+        callback(new Error($t('tips.inconsistent_password')))
       } else {
         callback()
       }
@@ -121,26 +122,26 @@ export default {
       },
       rules: {
         loginName: [
-          { required: true, message: '账号不能为空', trigger: 'blur' }
+          { required: true, message: $t('tips.invalid_account'), trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '密码不能为空', trigger: 'blur' }
+          { required: true, message: $t('tips.invalid_password'), trigger: 'blur' }
         ]
       },
       regFormValidate: {
         loginName: [
-          { required: true, message: '请输入登录名', trigger: 'blur' }
+          { required: true, message: $t('tips.input_name'), trigger: 'blur' }
         ],
         email: [
-          { type: 'email', required: true, message: '请输入常用邮箱', trigger: 'blur' }
+          { type: 'email', required: true, message: $t('tips.input_email'), trigger: 'blur' }
         ],
         oldPassWord: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, message: '请至少输入6个字符', trigger: 'blur' },
-          { max: 32, message: '最多输入32个字符', trigger: 'blur' }
+          { required: true, message: $t('tips.input_password'), trigger: 'blur' },
+          { min: 6, message: $t('tips.min_length'), trigger: 'blur' },
+          { max: 32, message: $t('tips.max_length'), trigger: 'blur' }
         ],
         newPassWord: [
-          { required: true, message: '请再次输入密码', trigger: 'blur' },
+          { required: true, message: $t('tips.input_password_again'), trigger: 'blur' },
           { validator: valideRePassword, trigger: 'blur' }
         ]
       },
@@ -151,7 +152,7 @@ export default {
       },
       forgetValidate: {
         email: [
-          { type: 'email', required: true, message: '请输入注册时的邮箱', trigger: 'blur' }
+          { type: 'email', required: true, message: $t('tips.input_registered_email'), trigger: 'blur' }
         ]
       },
       emailError: '',
@@ -182,7 +183,7 @@ export default {
               Cookies.set('access', 1)
               localStorage.setItem('token', res.data.data.token)
 
-              this.$Message.success('登录成功！')
+              this.$Message.success($t('tips.login_success'))
               this.$router.push({
                 name: 'home'
               })
@@ -198,7 +199,7 @@ export default {
           util.ajax.post('/user/register.do', this.regForm)
             .then((res) => {
               if (res.data.status) {
-                this.$Message.success('注册成功！')
+                this.$Message.success($t('tips.sign_up_success'))
                 this.currentTab = 'login'
                 this.form.loginName = this.regForm.loginName
                 this.regForm = {
@@ -235,7 +236,7 @@ export default {
               if (!res.data.status) {
                 this.emailError = res.data.errormsg
               } else {
-                this.$Message.success('密码已经发送到你的邮箱，请查收')
+                this.$Message.success($t('tips.password_send_to_email'))
                 this.forget = false
               }
             }).catch((e) => {

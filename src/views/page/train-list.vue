@@ -3,7 +3,7 @@
         <Card>
             <p slot="title" style="overflow: visible">
                 <Row>
-                    <Col span="20"><Icon type="ios-keypad"></Icon> {{groupName}} - {{taskName}} 训练记录</Col>
+                    <Col span="20"><Icon type="ios-keypad"></Icon> {{groupName}} - {{taskName}} {{ $t("training.train_record") }}</Col>
                     <Col span="4" align="right"></Col>
                 </Row>
             </p>
@@ -21,6 +21,8 @@
 </template>
 <script>
 import util from '../../libs/util'
+import i18n from '@/i18n'
+let $t = i18n.$t
 export default {
   components: {
   },
@@ -28,19 +30,19 @@ export default {
     return {
       columns: [
         {
-          title: '时间',
+          title: $t('menus.time'),
           key: 'createdDate'
         },
         {
-          title: '文件名',
+          title: $t('menus.file_name'),
           key: 'logFileName'
         },
         {
-          title: '提交人',
+          title: $t('auditing.upload'),
           key: 'userName'
         },
         {
-          title: '操作',
+          title: $t('general.operate'),
           key: 'action',
           width: 260,
           render: (h, params) => {
@@ -62,7 +64,7 @@ export default {
                   })
                 }
               }
-            }, '查看详情'))
+            }, $t('general.detail')))
 
             buts.push(h('Button', {
               props: {
@@ -79,7 +81,7 @@ export default {
                   })
                 }
               }
-            }, '重新提交'))
+            }, $t('resubmit')))
 
             buts.push(h('Button', {
               props: {
@@ -97,7 +99,7 @@ export default {
                   })
                 }
               }
-            }, '测试'))
+            }, $t('general.testing')))
 
             return h('div', buts)
           }

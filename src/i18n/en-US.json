@@ -4,7 +4,9 @@
         "solutions":"Solutions",
         "use_cases":"Use Case",
         "development": "Development",
-        "cooperations":"Cooperations"
+        "cooperations":"Cooperations",
+        "console": "Console",
+        "quit": "Quit"
     },
     "router": {
         "label_tool":"Label Toolkit",
@@ -12,7 +14,11 @@
         "data_audit":"Review",
         "train":"Train",
         "group_manage":"Group",
-        "account_manage":"Account"
+        "account_manage":"Account",
+        "project": "Project",
+        "submit_training": "Submit Training",
+        "train_log": "Train Logs",
+        "train_record": "Train Records"
     },
     "settings": {
         "general": {
@@ -55,7 +61,12 @@
         "batch": "Batch",
         "total": "Total",
         "create_time": "CreatedAt",
-        "setting": "Settings"
+        "setting": "Settings",
+        "login": "Login",
+        "sign_up": "Register",
+        "time": "Time",
+        "file_name": "File Name",
+        "chinese": "Simplified Chinese"
     },
     "tasks": {
         "dashboard": {
@@ -64,18 +75,39 @@
         }
     },
     "general": {
+        "label": "Label",
         "save" : "Save",
         "cancel": "Cancel",
         "submit": "Submit",
         "delete": "Delete",
+        "confirm": "Confirm",
         "reject": "Reject",
         "review": "Review",
+        "edit": "Edit",
         "finish": "Complete",
         "add_image":"Add Image",
         "multi_file_upload": "Choose File",
         "upload_file": "Upload File",
         "set_training_paramter": "Set Training Params",
-        "upload_image": "Upload Image"
+        "upload_image": "Upload Image",
+        "operate": "操作",
+        "detail": "查看详情",
+        "resubmit": "重新提交",
+        "testing": "测试"
+    },
+    "table": {
+        "no":"No.",
+        "group":"Group",
+        "batch":"Batch",
+        "audited":"Audited",
+        "need_audit":"Need Audit",
+        "need_label":"Need Label",
+        "total":"Total",
+        "createdAt":"createdAt",
+        "operation":"Operate",
+        "submit_train":"Submit Training",
+        "train_record": "Train Record",
+        "view": "View"
     },
     "auditing": {
         "data_review": "Data Review",
@@ -92,7 +124,8 @@
         "name_or_email": "Username or Email",
         "upload": "Upload",
         "audit": "Review",
-        "create": "Create"
+        "create": "Create",
+        "reject_reason":"Reject Reason"
     },
     "status": {
         "to_be_labelled": "Need Labeling",
@@ -106,12 +139,18 @@
         "reason_for_rejected": "Reasons for Reject",
         "reject_to_be_labelled": "Reject-Need Labeling",
         "rejected_message": "Please input the reason",
-        "success": "Successfully"
+        "success": "Successfully",
+        "upload_success": "Upload Success",
+        "upload_fail": "Upload Failed"
     },
     "tagging": {
         "data_labeling": "Data Labeling",
         "create_batch": "Create Batch",
-        "input_batch_name": "Batch Name"
+        "input_batch_name": "Batch Name",
+        "choose_group":"Choose Group",
+        "edit_batch": "Edit Batch",
+        "batch_name": "Batch Name",
+        "belongs_to": "Belongs to"
     },
     "training": {
         "model_training": "Model Training",
@@ -120,6 +159,43 @@
         "detection": "Detection",
         "segmentation": "Segmentation",
         "classification": "Classification",
-        "choose_model": "Choose Model"
+        "choose_model": "Choose Model",
+        "train_record": "Train Record",
+        "log": "Train Log"
+    },
+    "tips": {
+        "logged_in": "You have logged in, go to Console.",
+        "relogin": "Quit and Re-Login",
+        "input_name_or_email": "Please input username or Email Addr",
+        "input_password": "Please input password",
+        "forgot_password": "forgot password?",
+        "input_name": "Please input username",
+        "input_email": "Please input email",
+        "input_password_again": "Confirm Password",
+        "input_registered_email": "Please input your register email",
+        "inconsistent_password":"Password Unmatch",
+        "invalid_account": "Username is invalid",
+        "invalid_password": "Password is invalid",
+        "min_length": "6 characters at least",
+        "max_length": "less than 32 characters",
+        "login_success": "Login Successfully",
+        "sign_up_success": "Register Successfully!",
+        "password_send_to_email": "The password has been sent to your email",
+        "gain_verification_code": "Get Vertification Code",
+        "retry": " seconds after",
+        "modify_success": "Changed Successfully!",
+        "write_verification_code": "Your Verification Code",
+        "verify_verification_code": "verified",
+        "save_success": "Saved!",
+        "cancel_tip":"You will delete this data, are you sure?",
+        "invalid_group": "Group Name cannot be empty",
+        "deleted": "Deleted"
+    },
+    "tool": {
+        "prev":"Prev",
+        "next":"Next",
+        "zoom_out":"Zoom Out",
+        "zoom_in":"Zoom In",
+        "auto_fit":"Best Fit"
     }
 }
