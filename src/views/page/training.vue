@@ -22,48 +22,46 @@
 <script>
 import expandRow from './data-detail.vue'
 import util from '../../libs/util'
-import i18n from '@/i18n'
-let $t = i18n.$t
 export default {
   components: { expandRow },
   data () {
     return {
       columns: [
         {
-          title: $t('table.no'),
+          title: this.$i18n.t('table.no'),
           key: 'idTaskInfo'
         },
         {
-          title: $t('table.group'),
+          title: this.$i18n.t('table.group'),
           key: 'groupName'
         },
         {
-          title: $t('table.batch'),
+          title: this.$i18n.t('table.batch'),
           key: 'taskName'
         },
         {
-          title: $t('table.audited'),
+          title: this.$i18n.t('table.audited'),
           key: 'auditNum'
         },
         {
-          title: $t('table.need_audit'),
+          title: this.$i18n.t('table.need_audit'),
           key: 'unAuditNum'
         },
         {
-          title: $t('table.need_label'),
+          title: this.$i18n.t('table.need_label'),
           key: 'unSignNum'
         },
         {
-          title: $t('table.total'),
+          title: this.$i18n.t('table.total'),
           key: 'allNum'
         },
         {
-          title: $t('table.createdAt'),
+          title: this.$i18n.t('table.createdAt'),
           key: 'createdDate',
           width: 200
         },
         {
-          title: $t('table.operation'),
+          title: this.$i18n.t('table.operation'),
           key: 'action',
           width: 260,
           render: (h, params) => {
@@ -84,7 +82,7 @@ export default {
                   })
                 }
               }
-            }, $t('table.submit_train')))
+            }, this.$i18n.t('table.submit_train')))
 
             buts.push(h('Button', {
               props: {
@@ -101,7 +99,7 @@ export default {
                   })
                 }
               }
-            }, $t('table.train_record')))
+            }, this.$i18n.t('table.train_record')))
 
             return h('div', buts)
           }
@@ -110,7 +108,7 @@ export default {
       data: [
       ],
       add: false,
-      addText: this.$t('auditing.create_group'),
+      addText: this.this.$i18n.t('auditing.create_group'),
       formValidate: {},
       save_loading: false,
       total: 0,
@@ -121,15 +119,15 @@ export default {
   methods: {
     showAdd () {
       this.add = true
-      this.addText = this.$t('auditing.create_group')
+      this.addText = this.$i18n.t('auditing.create_group')
     },
     showEdit () {
       this.add = true
-      this.addText = this.$t('auditing.edit_group')
+      this.addText = this.$i18n.t('auditing.edit_group')
     },
     saveAdd () {
       this.add = false
-      this.$Message.success(this.$t('auditing.create_success'))
+      this.$Message.success(this.$i18n.t('auditing.create_success'))
     },
     cancelAdd () {
       this.add = false
