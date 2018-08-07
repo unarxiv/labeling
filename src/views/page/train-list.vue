@@ -21,8 +21,6 @@
 </template>
 <script>
 import util from '../../libs/util'
-import i18n from '@/i18n'
-let $t = i18n.$t
 export default {
   components: {
   },
@@ -30,19 +28,19 @@ export default {
     return {
       columns: [
         {
-          title: $t('menus.time'),
+          title: this.$i18n.t('menus.time'),
           key: 'createdDate'
         },
         {
-          title: $t('menus.file_name'),
+          title: this.$i18n.t('menus.file_name'),
           key: 'logFileName'
         },
         {
-          title: $t('auditing.upload'),
+          title: this.$i18n.t('auditing.upload'),
           key: 'userName'
         },
         {
-          title: $t('general.operate'),
+          title: this.$i18n.t('general.operate'),
           key: 'action',
           width: 260,
           render: (h, params) => {
@@ -64,7 +62,7 @@ export default {
                   })
                 }
               }
-            }, $t('general.detail')))
+            }, this.$i18n.t('general.detail')))
 
             buts.push(h('Button', {
               props: {
@@ -81,7 +79,7 @@ export default {
                   })
                 }
               }
-            }, $t('resubmit')))
+            }, this.$i18n.t('resubmit')))
 
             buts.push(h('Button', {
               props: {
@@ -99,7 +97,7 @@ export default {
                   })
                 }
               }
-            }, $t('general.testing')))
+            }, this.$i18n.t('general.testing')))
 
             return h('div', buts)
           }

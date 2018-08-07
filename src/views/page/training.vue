@@ -108,7 +108,7 @@ export default {
       data: [
       ],
       add: false,
-      addText: this.this.$i18n.t('auditing.create_group'),
+      addText: this.$i18n.t('auditing.create_group'),
       formValidate: {},
       save_loading: false,
       total: 0,
