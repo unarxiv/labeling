@@ -18,9 +18,9 @@ export const router = new VueRouter(RouterConfig)
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()
   const curRouterObj = Util.getRouterObjByName([otherRouter, ...appRouter], to.name)
-  if (curRouterObj && Cookies.get('user')) { 
+  if (curRouterObj && Cookies.get('user')) {
     Util.toDefaultPage([otherRouter, ...appRouter], to.name, router, next)
-  } else { 
+  } else {
     Util.toDefaultPage([...routers], to.name, router, next)
   }
 })

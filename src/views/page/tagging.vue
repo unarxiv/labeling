@@ -42,8 +42,6 @@
 <script>
 import expandRow from './data-detail.vue'
 import util from '../../libs/util'
-import i18n from '@/i18n'
-let $t = i18n.$t
 export default {
   components: { expandRow },
   data () {

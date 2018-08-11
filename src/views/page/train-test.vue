@@ -95,14 +95,16 @@ export default {
       img.src = url
     },
     upSuccess (response, file, fileList) {
+      let self = this
       setTimeout(() => {
-        this.$Message.success($t('status.upload_success'))
+        this.$Message.success(self.$i18n.t('status.upload_success'))
         this.loading = false
       }, 2000)
     },
     upError (e) {
+      let self = this
       setTimeout(() => {
-        this.$Message.error($t('status.upload_fail'))
+        this.$Message.error(self.$i18n.t('status.upload_fail'))
         this.loading = false
       }, 2000)
     },
