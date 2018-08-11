@@ -92,6 +92,34 @@
             <Button type="primary" :loading="save_loading" @click="sendTrain">{{ $t("general.submit") }}</Button>
           </div>
         </Modal>
+        <Modal
+          v-model="attrInput"
+          width="300"
+          class-name="attr-box"
+          :closable="false"
+          @on-cancel="cancel"
+          >
+          <h3 slot="header" style="color:#2D8CF0">分类标注</h3>
+          <Form :model="formItem" :label-width="50" :rules="rules" ref="attrForm">
+            <FormItem label="快捷">
+            <Select v-model="quickList" placeholder="可以选择已标记过标签" @on-change="quickSelect">
+              <Option value="-1" disabled>可以选择已标记过标签</Option>
+              <Option v-for="(v,i) in vectorgraphHis" :value="i" :key="i">{{ v.name }}</Option>
+            </Select>
+            </FormItem>
+            <FormItem label="名称" prop="name">
+                <Input v-model="formItem.name" placeholder="Enter object name" />
+            </FormItem>
+            <FormItem label="描述" prop="desc">
+                <Input v-model="formItem.desc" type="textarea" :autosize="{minRows: 3,maxRows: 3}" placeholder="Enter attributes..."></Input>
+            </FormItem>
+          </Form>
+          <div slot="footer">
+              <Button type="text" size="small" @click="cancel">取消</Button>
+              <Button type="warning" size="small" @click="deleteSign">删除</Button>
+              <Button type="primary" size="small" @click="confirm">确定</Button>
+          </div>
+      </Modal>
     </div>
 </template>
 
@@ -131,7 +159,24 @@ export default {
       groupName: '',
       taskName: '',
       train: false,
-      trainList: []
+      trainList: [],
+      quickList: '',
+      vectorgraphHis: [],
+      attrInput: false,
+      formItem: {
+        name: '',
+        radio: '',
+        desc: '',
+        color: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '属性名称不能为空', trigger: 'blur' }
+        ],
+        desc: [
+          { required: true, message: '描述不能为空', trigger: 'blur' }
+        ]
+      }
     }
   },
   filters: {
@@ -334,6 +379,21 @@ export default {
           this.getData()
         }
       })
+    },
+    cancel () {
+      this.attrInput = false
+    },
+    deleteSign () {
+      this.attrInput = false
+    },
+    confirm () {
+      this.attrInput = false
+    },
+    quickSelect () {
+
+    },
+    setSign () {
+      this.attrInput = true
     }
   },
   created () {

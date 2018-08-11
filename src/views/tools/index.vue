@@ -6,7 +6,7 @@
          <div class="ivu-col">
            <p style="overflow: visible;">
             <Row>
-                <Col span="20"><Icon type="ios-keypad"></Icon> {{$t('general.label')}}-{{fileName}}</Col>
+                <Col span="20"><Icon type="ios-keypad"></Icon> 标记{{fileName}}</Col>
                 <Col span="4" align="right">
                   <Button type="primary" shape="circle" icon="android-add" @click="changeType(2)" v-if="listType==='tagging'">提交审批</Button>
                 </Col>
@@ -17,10 +17,13 @@
       </div>
         <Header>
           <div class="toolbar">
+            <Tooltip content="返回" placement="bottom">
+              <button @click="backPage" style="font-size:26px;color:rgba(29,193,207,.75);font-weight:100"><Icon type="backspace"></Icon></button>
+            </Tooltip>
             <Tooltip :content="$t('tool.prev')" placement="bottom">
               <button class="pre" @click="goPage(-1)"></button>
             </Tooltip>
-            <Tooltip content="$t('tool.next')" placement="bottom">
+            <Tooltip :content="$t('tool.next')" placement="bottom">
               <button class="next" @click="goPage(1)"></button>
             </Tooltip>
             <Tooltip :content="$t('tool.zoom_out')" placement="bottom">
@@ -53,9 +56,16 @@
           </div>
         </Header>
         <Layout class="layout-content" ref="layoutcontent">
-            <Content style="position:relative" ref="content" :style="{background: '#f5f7f9'}">
+            <Content style="position:relative;overflow-x:auto" ref="content" :style="{background: '#f5f7f9'}">
               <Spin size="large" v-show="loadingImage"></Spin>
-              <section v-show="!loadingImage" class="l-section" ref="section" @mousemove="drawMove($event)" @mousedown="drawStart($event)" @mouseup="drawEnd($event)" @mouseout="drawOut($event)">
+              <section v-show="!loadingImage" class="l-section" ref="section"
+                @mousemove="drawMove($event)"
+                @mousedown="drawStart($event)"
+                @mouseup="drawEnd($event)"
+                @mouseout="drawOut($event)"
+                @mousewheel="wheel($event)"
+                @DOMMouseScroll="wheel($event)"
+                >
                 <canvas ref="img_canvas" width="100%" height="100%"/>
                 <svg ref="draw_canvas" width="100%" height="100%"/>
                 <svg ref="list_canvas" width="100%" height="100%"/>
@@ -90,23 +100,32 @@
         @on-cancel="cancel"
         >
         <Form :model="formItem" :label-width="50" :rules="rules" ref="attrForm">
-             <FormItem label="名称" prop="name">
-                <AutoComplete
-                    v-model="formItem.name"
-                    @on-search="remoteMethod"
-                    @on-change="remoteMethod"
-                    placeholder="Enter object name">
-                    <Option v-for="(option, index) in remoteList" :value="option.name" :key="index" @click.native="remoteChange(option.idLabelInfo)">{{option.name}}</Option>
-                </AutoComplete>
-            </FormItem>
-            <FormItem label="描述" prop="desc">
-                <Input v-model="formItem.desc" type="textarea" :autosize="{minRows: 3,maxRows: 3}" placeholder="Enter attributes..."></Input>
-            </FormItem>
+          <FormItem label="快捷">
+          <Select v-model="quickList" placeholder="可以选择已标记过标签" @on-change="quickSelect">
+            <Option value="-1" disabled>可以选择已标记过标签</Option>
+            <Option v-for="(v,i) in vectorgraphHis" :value="i" :key="i">{{ v.name }}</Option>
+          </Select>
+          </FormItem>
+          <FormItem label="名称" prop="name">
+              <Input v-model="formItem.name" placeholder="Enter object name" />
+          </FormItem>
+          <!-- <FormItem label="闭塞">
+              <RadioGroup v-model="formItem.radio">
+                  <Radio label="yes">是</Radio>
+                  <Radio label="no">否</Radio>
+              </RadioGroup>
+          </FormItem> -->
+          <FormItem label="描述" prop="desc">
+              <Input v-model="formItem.desc" type="textarea" :autosize="{minRows: 3,maxRows: 3}" placeholder="Enter attributes..."></Input>
+          </FormItem>
+          <!-- <FormItem label="边框">
+              <ColorPicker v-model="formItem.color" />
+          </FormItem> -->
         </Form>
         <div slot="footer">
-            <Button type="text" size="small" @click="cancel">{{$t('general.cancel')}}</Button>
-            <Button type="warning" size="small" @click="deleteNode">{{$t('general.delete')}}</Button>
-            <Button type="primary" size="small" @click="confirm">{{$t('general.confirm')}}</Button>
+            <Button type="text" size="small" @click="cancel">取消</Button>
+            <Button type="warning" size="small" @click="deleteNode">删除</Button>
+            <Button type="primary" size="small" @click="confirm">确定</Button>
         </div>
     </Modal>
 </div>
@@ -178,7 +197,8 @@ export default {
       loadingImage: false,
       remoteList: [],
       listType: '',
-      dataList: []
+      dataList: [],
+      quickList: ''
     }
   },
   methods: {
@@ -192,6 +212,14 @@ export default {
     },
     setType (t) {
       this.type = t
+      this.deleteNode()
+      Draw.removeNode(this.startDot)
+      this.startDot = null
+
+      this.points = []
+      this.pointsBack = []
+      this.end = false
+      this.draw = false
     },
     drawStart (e) {
       if (!this.start) return
@@ -231,11 +259,18 @@ export default {
       this.$refs.draw_canvas.appendChild(this.startDot)
     },
     drawMove (e) {
-      if (!this.draw) return
+      if (!this.draw && this.type !== 2) return
       if (this.type === 1) {
         this.drawRect(this.drawEl, e)
       } else if (this.type === 2) {
-
+        if (this.points.length > 0) {
+          let points = this.points.slice()
+          points.push({
+            x: e.offsetX,
+            y: e.offsetY
+          })
+          this.drawPoly(this.drawEl, points)
+        }
       } else if (this.type === 3) {
         if (this.points.length > 1 && Math.abs(this.points[0].x - e.offsetX) <= 4 && Math.abs(this.points[0].y - e.offsetY) <= 4) {
           this.points.push({
@@ -326,10 +361,11 @@ export default {
         // 'style': 'fill: ' + this.color + ';stroke:' + this.color + ';stroke-width:4;fill-opacity:0;stroke-opacity:0.9'
       })
     },
-    drawPoly (el) {
-      if (this.points.length > 0) {
+    drawPoly (el, points) {
+      points = points || this.points
+      if (points.length > 0) {
         Draw.setAttr(el, {
-          'points': Draw.pointsToString(this.points),
+          'points': Draw.pointsToString(points),
           'stroke': this.color,
           'stroke-width': 4 * this.scale,
           'fill': 'none',
@@ -368,10 +404,12 @@ export default {
       this.pointsBack = []
       this.end = false
       this.draw = false
-      this.attrInput = true
-      this.$nextTick(() => {
-        this.vectorClick(this.drawEl)
-      })
+      if (this.autoSave()) {
+        this.attrInput = true
+        this.$nextTick(() => {
+          this.vectorClick(this.drawEl)
+        })
+      }
     },
     initSize () {
       this.$refs.section.style.width = this.availWidth + 'px'
@@ -410,7 +448,10 @@ export default {
     },
     addVector () {
       let svg = this.$refs.list_canvas
-      svg.innerHTML = ''
+      // svg.innerHTML = ''
+      while (svg.childNodes.length > 0) {
+        svg.removeChild(svg.firstChild)
+      }
       this.vectorgraph.forEach(v => {
         let vector = Draw.vector(v.type)
         v.el = vector
@@ -458,6 +499,7 @@ export default {
     },
     vectorClick (vector) {
       this.drawEl = vector
+      this.quickList = -1
       let f = this.vectorgraph.filter(v => {
         return v.el === this.drawEl
       })
@@ -599,6 +641,7 @@ export default {
           let data = res.data.data
           this.fileName = data.fileName
           this.fileSrc = util.imgUrl + data.fileSrc
+          this.vectorgraph = []
           this.vectorgraph = this.formatData(data.list)
           this.loadImage()
         }
@@ -655,10 +698,12 @@ export default {
     },
     tagItemOver (e, v) {
       this.hoverIndex = v.idLabelInfo
-      v.el.style = 'fill:red;stroke-width:' + this.scale * 6 + ';fill-opacity:0.3;stroke-opacity:0.9'
+      // v.el.style = 'fill:red;stroke-width:' + this.scale * 6 + ';fill-opacity:0.3;stroke-opacity:0.9'
+      v.el.setAttribute('style', 'fill:red;stroke-width:' + this.scale * 6 + ';fill-opacity:0.3;stroke-opacity:0.9')
     },
     tagItemOut (e, v) {
-      v.el.style = ''
+      // v.el.style = ''
+      v.el.setAttribute('style', '')
       this.hoverIndex = ''
     },
     changeType (state, auditMsg) {
@@ -710,6 +755,12 @@ export default {
         }
       })
       _item.checked = !_item.checked
+      if (_item.checked) {
+        this.$Modal.info({
+          title: '提示',
+          content: '<p style="font-size:14px">选中该项，接下来的标注默认都用该属性,不会再弹框确认</p><p style="font-size:14px">再次点击可以取消</p>'
+        })
+      }
       this.$forceUpdate()
     },
     getDataList (load) {
@@ -753,6 +804,7 @@ export default {
       })
     },
     goPage (t) {
+      this.setScale(0)
       let inx = 0
       let id = this.id
       this.dataList.forEach((v, k) => {
@@ -800,6 +852,62 @@ export default {
           desc: info.desc
         })
       }
+    },
+    wheel (e) {
+      e.preventDefault()
+      let direction = 0
+      if (e.wheelDelta) {
+        direction = e.wheelDelta > 0 ? 1 : -1
+      } else if (e.detail) {
+        direction = e.detail < 0 ? 1 : -1
+      }
+      if (direction) {
+        this.setScale(direction)
+      }
+    },
+    keydown (e) {
+      if (e.type === 'keydown' && e.keyCode === 17) {
+        this.keydownctrl = true
+      }
+    },
+    keyup (e) {
+      if (e.type === 'keyup') {
+        if (e.keyCode === 37) {
+          this.goPage(-1)
+        } else if (e.keyCode === 39) {
+          this.goPage(1)
+        }
+        if (this.keydownctrl === true && e.keyCode === 90) {
+          this.reply()
+        }
+        if (this.keydownctrl === true && e.keyCode === 89) {
+          this.forward()
+        }
+        if (e.keyCode === 17) {
+          this.keydownctrl = null
+        }
+      }
+    },
+    quickSelect (i) {
+      if (Number(i) === -1 || typeof i === 'undefined') {
+        return
+      }
+      let _item = this.vectorgraphHis[i]
+      this.formItem.name = _item.name
+      this.formItem.desc = _item.desc
+    },
+    autoSave () {
+      let checks = this.vectorgraphHis.filter((v, k) => {
+        return v.checked
+      })
+      if (checks.length > 0) {
+        this.formItem.name = checks[0].name
+        this.formItem.desc = checks[0].desc
+        this.confirm()
+        return false
+      } else {
+        return true
+      }
     }
   },
   created () {
@@ -813,6 +921,8 @@ export default {
     this.getTaged()
     window.addEventListener('resize', this.resize, false)
     document.addEventListener('resize', this.resize, false)
+    document.addEventListener('keydown', this.keydown, false)
+    document.addEventListener('keyup', this.keyup, false)
   },
   mounted () {
     this.$refs.layoutcontent.$el.style.height = (document.body.offsetHeight - this.$refs.content.$el.offsetTop - 94 - 30) + 'px'
@@ -821,6 +931,8 @@ export default {
   destroyed () {
     window.removeEventListener('resize', this.resize, false)
     document.removeEventListener('resize', this.resize, false)
+    document.removeEventListener('keydown', this.keydown, false)
+    document.removeEventListener('keyup', this.keyup, false)
   }
 }
 </script>

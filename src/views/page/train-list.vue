@@ -9,12 +9,12 @@
             </p>
             <div>
               <Table :columns="columns" :data="data"></Table>
-              <!-- <p style="padding-top:10px; text-align:right">
+              <p style="padding-top:10px; text-align:right">
                   <Page :total="total" :page-size="pageSize"
                   @on-change="pageChange"
                   @on-page-size-change="pageSizeChange"
                   size="small" show-elevator show-sizer show-total></Page>
-              </p> -->
+              </p>
             </div>
         </Card>
     </div>

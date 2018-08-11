@@ -9,6 +9,9 @@
                     <left-menu :isCollapsed="isCollapsed"></left-menu>
                 </Sider>
                 <Layout :style="{padding: '30px'}">
+                    <div>
+                        <span @click="$router.go(-1)" style="position: absolute;z-index: 1;margin-top: 13px;margin-left: 8px;"><Icon type="android-arrow-back" style="font-size:2em"></Icon></span>
+                    </div>
                     <router-view></router-view>
                 </Layout>
             </Layout>
