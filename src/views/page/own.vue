@@ -44,13 +44,13 @@
             <h3 slot="header" style="color:#2D8CF0">{{ $t("settings.change_password") }}</h3>
             <Form ref="editPasswordForm" :model="editPasswordForm" :label-width="100" label-position="right" :rules="passwordValidate">
                 <FormItem :label="$t('settings.original_password')" prop="oldPass" :error="oldPassError">
-                    <Input v-model="editPasswordForm.oldPass" type="password" :placeholder="$t('settings.input_original_password')" ></Input>
+                    <Input v-model="editPasswordForm.oldPass" type="password" :placeholder="$t('settings.input_original_password')" />
                 </FormItem>
                 <FormItem :label="$t('settings.new_password')" prop="newPass">
-                    <Input v-model="editPasswordForm.newPass" type="password" :placeholder="$t('settings.input_new_password')" ></Input>
+                    <Input v-model="editPasswordForm.newPass" type="password" :placeholder="$t('settings.input_new_password')" />
                 </FormItem>
                 <FormItem :label="$t('settings.confirm_new_password')" prop="rePass">
-                    <Input v-model="editPasswordForm.rePass" type="password" :placeholder="$t('settings.input_new_password_again')" ></Input>
+                    <Input v-model="editPasswordForm.rePass" type="password" :placeholder="$t('settings.input_new_password_again')" />
                 </FormItem>
             </Form>
             <div slot="footer">
@@ -84,7 +84,7 @@ export default {
       selected_language: getLang(),
       languages: [
         'English',
-        this.$i18n.t('menus.chinese'),
+        '中文(简体)',
         'Deutschland'
       ],
       uid: '', // 登录用户的userId

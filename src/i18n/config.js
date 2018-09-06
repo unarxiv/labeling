@@ -3,6 +3,7 @@ import map from '@/i18n/map'
 
 function setLang (lang) {
   localStorage.setItem('lang', lang)
+  console.log(map[lang])
   i18n.locale = map[lang]
 }
 
