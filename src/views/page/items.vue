@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                             <section>
-                              <p v-if="i.className && i.className.length>0">{{$t(general.class)}} : {{i.className}}</p>
+                              <p v-if="i.className && i.className.length>0">{{$t("general.class")}} : {{i.className}}</p>
                             </section>
                         </li>
                     </ul>
