@@ -75,6 +75,9 @@
         }
     },
     "general": {
+        "class": "class",
+        "train_all_batch": "Train this Batch",
+        "classification_label": "Label Classification",
         "label": "Label",
         "save" : "Save",
         "cancel": "Cancel",

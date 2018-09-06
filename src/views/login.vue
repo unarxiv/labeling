@@ -154,14 +154,16 @@ export default {
         ]
       },
       emailError: '',
-      forgetLoading: false,
-      isLogin: !!Cookies.get('user')
+      forgetLoading: false
     }
   },
   computed: {
 
     userName () {
       return Cookies.get('user')
+    },
+    isLogin () {
+      return this.$store.state.login
     }
   },
   components: {
@@ -180,7 +182,7 @@ export default {
               Cookies.set('user', this.form.loginName)
               Cookies.set('access', 1)
               localStorage.setItem('token', res.data.data.token)
-
+              this.$store.commit('setLogin')
               this.$Message.success(this.$i18n.t('tips.login_success'))
               this.$router.push({
                 name: 'home'
@@ -253,8 +255,8 @@ export default {
             this.$Message.success(res.data.data)
             // 退出登录
             Cookies.remove('user')
+            this.$store.commit('loginOut')
             localStorage.removeItem('token')
-            this.isLogin = false
             this.$router.push('/')
           } else {
             this.$Message.error(res.data.errormsg)
@@ -279,6 +281,7 @@ export default {
     if (this.$route.query.out) {
       this.loginout()
     }
+    this.$store.commit('setLogin')
   }
 }
 </script>

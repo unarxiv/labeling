@@ -57,7 +57,6 @@
         </Header>
         <Layout class="layout-content" ref="layoutcontent">
             <Content style="position:relative;overflow-x:auto" ref="content" :style="{background: '#f5f7f9'}">
-              <Spin size="large" v-show="loadingImage"></Spin>
               <section v-show="!loadingImage" class="l-section" ref="section"
                 @mousemove="drawMove($event)"
                 @mousedown="drawStart($event)"
@@ -70,6 +69,7 @@
                 <svg ref="draw_canvas" width="100%" height="100%"/>
                 <svg ref="list_canvas" width="100%" height="100%"/>
               </section>
+              <Spin size="large" fix v-show="loadingImage"></Spin>
             </Content>
             <Sider :style="{background: '#f5f7f9'}" >
               <div class="tag-box">
@@ -160,7 +160,7 @@ export default {
         }
       ],
       start: true,
-      end: false,
+      end: true,
       sectionWidth: 0,
       sectionHeight: 0,
       availHeight: 0,
@@ -198,7 +198,10 @@ export default {
       remoteList: [],
       listType: '',
       dataList: [],
-      quickList: ''
+      quickList: '',
+      cacheImgs: {},
+      preImg: null,
+      nextImg: null
     }
   },
   methods: {
@@ -224,6 +227,7 @@ export default {
     drawStart (e) {
       if (!this.start) return
       this.draw = true
+      this.end = false
       this.startDot = this.startDot || Draw.vector('circle')
 
       this.startOffset = {
@@ -390,7 +394,6 @@ export default {
           Draw.removeNode(this.drawEl)
           this.drawEl = null
           this.points = []
-          this.end = false
           this.draw = false
           return
         }
@@ -402,7 +405,6 @@ export default {
 
       this.points = []
       this.pointsBack = []
-      this.end = false
       this.draw = false
       if (this.autoSave()) {
         this.attrInput = true
@@ -440,8 +442,11 @@ export default {
         this.addVector()
       }
       // img.src = this.imgUrls[this.page];
-      img.src = this.fileSrc
-      // img.src = 'http://120.79.213.19:8080/public/images/sign_img/2018/6-25/a994ca986694e3bdde9f6665bc256c69.jpg'
+      if (this.cacheImgs[this.fileSrc]) {
+        img.src = this.cacheImgs[this.fileSrc].src
+      } else {
+        img.src = this.fileSrc
+      }
     },
     resize () {
       this.loadImage()
@@ -480,11 +485,15 @@ export default {
       }, false)
       el.addEventListener('click', (e) => {
         e.preventDefault()
-        this.attrInput = true
-        let vector = e.target
-        this.$nextTick(() => {
-          this.vectorClick(vector)
-        })
+        if (this.end === false) {
+
+        } else {
+          this.attrInput = true
+          let vector = e.target
+          this.$nextTick(() => {
+            this.vectorClick(vector)
+          })
+        }
       }, false)
     },
     setScale (t) {
@@ -674,6 +683,7 @@ export default {
           this.$Message.error(res.data.errormsg)
         } else {
           this.$Message.success('已保存')
+          this.addHisData(attr)
         }
       })
     },
@@ -803,7 +813,80 @@ export default {
         }
       })
     },
+    getUpData () {
+      let qs = require('qs')
+      let url = '/sign/queryFilesForNext.do'
+      util.ajax.get(url + '?' + qs.stringify({
+        idSignInfo: this.id,
+        loadType: 'up',
+        loadSize: 1
+      })).then(res => {
+        this.preImg = null
+        if (res.data.status) {
+          let data = res.data.data
+          data.forEach((i) => {
+            let img = new Image()
+            img.src = util.imgUrl + i.fileSrc
+            this.cacheImgs[img.src] = img
+          })
+          if (data.length > 0) {
+            this.preImg = data[0]
+          }
+        }
+      })
+    },
+    getDownData () {
+      let qs = require('qs')
+      let url = '/sign/queryFilesForNext.do'
+      util.ajax.get(url + '?' + qs.stringify({
+        idSignInfo: this.id,
+        loadType: 'down',
+        loadSize: 1
+      })).then(res => {
+        this.nextImg = null
+        if (res.data.status) {
+          let data = res.data.data
+          data.forEach((i) => {
+            let img = new Image()
+            img.src = util.imgUrl + i.fileSrc
+            this.cacheImgs[img.src] = img
+          })
+          if (data.length > 0) {
+            this.nextImg = data[0]
+          }
+        }
+      })
+    },
     goPage (t) {
+      if (t < 0) {
+        if (this.preImg === null) {
+          this.$Message.warning('已经到了第一张')
+        } else {
+          this.id = this.preImg.idSignInfo
+          this.getData()
+          this.$router.replace({
+            path: '/tools/' + this.listType + '/' + this.id,
+            query: {
+              idTaskInfo: this.idTaskInfo
+            }
+          })
+        }
+      } else if (t > 0) {
+        if (this.nextImg === null) {
+          this.$Message.warning('已经到了最后一张')
+        } else {
+          this.id = this.nextImg.idSignInfo
+          this.getData()
+          this.$router.replace({
+            path: '/tools/' + this.listType + '/' + this.id,
+            query: {
+              idTaskInfo: this.idTaskInfo
+            }
+          })
+        }
+      }
+    },
+    goPage2 (t) {
       this.setScale(0)
       let inx = 0
       let id = this.id
@@ -819,11 +902,9 @@ export default {
       }
       if (inx < 0) {
         this.page = this.page - 1
-        console.log('pre', this.page)
         this.getDataList('pre')
       } else if (inx >= this.dataList.length) {
         this.page = this.page + 1
-        console.log('next', this.page)
         this.getDataList('next')
       } else {
         this.id = this.dataList[inx].idSignInfo
@@ -917,7 +998,7 @@ export default {
     this.pageSize = this.$route.query.pageSize
     this.idTaskInfo = this.$route.query.idTaskInfo
     this.getData()
-    this.getDataList()
+    // this.getDataList()
     this.getTaged()
     window.addEventListener('resize', this.resize, false)
     document.addEventListener('resize', this.resize, false)
@@ -927,6 +1008,12 @@ export default {
   mounted () {
     this.$refs.layoutcontent.$el.style.height = (document.body.offsetHeight - this.$refs.content.$el.offsetTop - 94 - 30) + 'px'
     this.loadImage()
+  },
+  watch: {
+    id () {
+      this.getUpData()
+      this.getDownData()
+    }
   },
   destroyed () {
     window.removeEventListener('resize', this.resize, false)
@@ -940,49 +1027,49 @@ export default {
     @import './tools.less';
 </style>
 <style lang="less">
-    .attr-box{
-        .ivu-modal{
-            &.top-arrow:before{
-                content: '';
-                top:-8px;
-                left: 18px;
-                position: absolute;
-                height: 15px;
-                width: 15px;
-                background: #fff;
-                transform: rotate(45deg);
-            }
-            &.bottom-arrow:before{
-                content: '';
-                bottom:-8px;
-                left: 18px;
-                position: absolute;
-                height: 15px;
-                width: 15px;
-                background: #fff;
-                transform: rotate(45deg);
-            }
-
-        }
-
-        textarea.ivu-input{
-            font-size:12px;
-        }
-    }
-    .ivu-color-picker-picker-colors{
-        line-height:1em;
-    }
-    .toolbar{
-      background-color: #313343;
-      .ivu-tooltip-rel{
-          vertical-align: middle;
-          height: 50px;
-          line-height: 50px;
-          background-color: #313343;
-          .ivu-input{
-            border: 1px solid #313343;
-            background-color: transparent;
+  .attr-box{
+      .ivu-modal{
+          &.top-arrow:before{
+              content: '';
+              top:-8px;
+              left: 18px;
+              position: absolute;
+              height: 15px;
+              width: 15px;
+              background: #fff;
+              transform: rotate(45deg);
           }
+          &.bottom-arrow:before{
+              content: '';
+              bottom:-8px;
+              left: 18px;
+              position: absolute;
+              height: 15px;
+              width: 15px;
+              background: #fff;
+              transform: rotate(45deg);
+          }
+
       }
+
+      textarea.ivu-input{
+          font-size:12px;
+      }
+  }
+  .ivu-color-picker-picker-colors{
+      line-height:1em;
+  }
+  .toolbar{
+    background-color: #313343;
+    .ivu-tooltip-rel{
+        vertical-align: middle;
+        height: 50px;
+        line-height: 50px;
+        background-color: #313343;
+        .ivu-input{
+          border: 1px solid #313343;
+          background-color: transparent;
+        }
     }
+  }
 </style>

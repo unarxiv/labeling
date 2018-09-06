@@ -15,9 +15,11 @@
                         <Button :type="checkAll?'primary':'default'" @click="selectAll" :icon="checkAll?'android-checkbox-outline':'android-checkbox-outline-blank'">{{ $t("status.all_selected") }}</Button>
                         <Button icon="android-delete" v-if="power==1" :disabled="used()" @click="deleteImgs">{{ $t("general.delete") }}</Button>
                         <Button icon="checkmark" v-if="power==1" :disabled="used()" @click="changeType(2)">{{ $t("status.submit_for_review") }}</Button>
+                        <Button icon="ios-photos-outline" v-if="power==1" :disabled="used()" @click="setSign()">{{ $t("general.classification_label") }}</Button>
                         <Button icon="checkmark" v-if="power==2" :disabled="used()" @click="changeType(3)">{{ $t("status.accepted") }}</Button>
                         <Button icon="android-arrow-back" v-if="power==2" @click="backShow" :disabled="used()">{{ $t("general.reject") }}</Button>
                         <Button icon="checkmark" v-if="power==3" :disabled="used()" @click="showTrain">{{ $t("status.submit_for_training") }}</Button>
+                        <Button icon="grid" v-if="power==3" @click="showTrain(1)">{{ $t("general.train_all_batch") }}</Button>
                         <Button icon="android-add" @click="addImage" v-if="power==1">{{ $t("general.add_image") }}</Button>
                     </Col>
                 </Row>
@@ -27,7 +29,7 @@
                     <ul class="vectorgraph">
                         <li v-for="(i,k) in data" :key="k" :class="{selected:i.selected}">
                             <div>
-                                <div @click="select(i,k)" class="vector-img" :style="{backgroundImage:'url('+baseImgURL+'/'+i.fileSrc+')'}"></div>
+                                <div @click="select(i,k)" class="vector-img" :style="{backgroundImage:'url('+baseImgURL + i.fileZoomSrc+'?'+(new Date).getTime()+')'}"></div>
                                 <div class="item-button">
                                    <Row>
                                      <Col span="18">{{i.fileName}}</Col>
@@ -48,6 +50,9 @@
                                   <Icon type="android-done"></Icon>
                                 </div>
                             </div>
+                            <section>
+                              <p v-if="i.className && i.className.length>0">{{$t(general.class)}} : {{i.className}}</p>
+                            </section>
                         </li>
                     </ul>
                 </Col>
@@ -68,7 +73,6 @@
                     </Upload>
             </Form>
             <div slot="footer">
-                <!-- <Button type="text" @click="cancelAdd">取消</Button> -->
                 <Button type="primary" :loading="save_loading" @click="saveAdd">{{ $t("general.finish") }}</Button>
             </div>
         </Modal>
@@ -116,7 +120,6 @@
           </Form>
           <div slot="footer">
               <Button type="text" size="small" @click="cancel">取消</Button>
-              <Button type="warning" size="small" @click="deleteSign">删除</Button>
               <Button type="primary" size="small" @click="confirm">确定</Button>
           </div>
       </Modal>
@@ -205,8 +208,6 @@ export default {
       this.$router.push({
         path: '/tools/' + this.type + '/' + item.idSignInfo,
         query: {
-          page: this.page,
-          pageSize: this.pageSize,
           idTaskInfo: this.id
         }
       })
@@ -270,6 +271,7 @@ export default {
           let data = res.data.data
           this.data = data && data.list
           this.total = data && data.fullListSize
+          this.checkAll = false
         }
       })
     },
@@ -301,6 +303,11 @@ export default {
       this.getData()
     },
     sendTrain () {
+      if (this.allTrain === true) {
+        this.sendTrainAll()
+        this.allTrain = false
+        return ''
+      }
       let list = this.data.filter(v => {
         return v.selected
       })
@@ -310,14 +317,12 @@ export default {
       this.trainList = list
       this.save_loading = true
       if (list.length > 0) {
-        let selectedModel = this.$refs.trainConfig.selected_model
         let config = this.$refs.trainConfig.config
         let type = this.$refs.trainConfig.type
         util.ajax.post('/train/startTrain.do', {
           config: config,
           signInfoIds: list,
-          trainType: type,
-          modelId: selectedModel
+          trainType: type
         }).then(res => {
           this.save_loading = false
           if (!res.data.status) {
@@ -331,16 +336,49 @@ export default {
               },
               query: {
                 groupName: this.groupName,
-                taskName: this.taskName,
-                modelId: data.log_file_name
+                taskName: this.taskName
               }
             })
           }
+        }).catch(() => {
+          this.save_loading = false
         })
       }
     },
-    showTrain () {
+    sendTrainAll () {
+      this.save_loading = true
+      let config = this.$refs.trainConfig.config
+      let type = this.$refs.trainConfig.type
+      util.ajax.post('/train/startTaskTrain.do', {
+        config: config,
+        idTaskInfo: this.id,
+        trainType: type
+      }).then(res => {
+        this.save_loading = false
+        if (!res.data.status) {
+          this.$Message.error(res.data.errormsg)
+        } else {
+          let data = res.data.data
+          this.$router.push({
+            name: 'trainlog',
+            params: {
+              id: data.idTrainInfo
+            },
+            query: {
+              groupName: this.groupName,
+              taskName: this.taskName
+            }
+          })
+        }
+      }).catch(() => {
+        this.save_loading = false
+      })
+    },
+    showTrain (flag) {
       this.train = true
+      if (flag) {
+        this.allTrain = true
+      }
     },
     closeTrain () {
       this.train = false
@@ -387,13 +425,76 @@ export default {
       this.attrInput = false
     },
     confirm () {
-      this.attrInput = false
+      this.$refs.attrForm.validate((valid) => {
+        if (valid) {
+          let list = this.data.filter(v => {
+            return v.selected
+          })
+          list = list.map(v => {
+            return v.idSignInfo
+          })
+          util.ajax.post('/sign/addOrUpdateClass.do', {
+            list: list,
+            className: this.formItem.name,
+            classDesc: this.formItem.desc,
+            idTaskInfo: this.id
+          }).then(res => {
+            this.attrInput = false
+            if (!res.data.status) {
+              this.$Message.error(res.data.errormsg)
+            } else {
+              this.$Message.success(this.$t('status.success'))
+              this.getData()
+              // this.vectorgraph[this.vectorgraph.length - 1].idClassInfo = res.data.data.idLabelInfo
+              this.addHisData({
+                name: this.formItem.name,
+                desc: this.formItem.desc
+              })
+            }
+          })
+        }
+      })
     },
-    quickSelect () {
-
+    quickSelect (i) {
+      if (Number(i) === -1 || typeof i === 'undefined') {
+        return
+      }
+      let _item = this.vectorgraphHis[i]
+      this.formItem.name = _item.name
+      this.formItem.desc = _item.desc
     },
     setSign () {
       this.attrInput = true
+      this.quickList = ''
+      this.formItem.name = ''
+      this.formItem.desc = ''
+    },
+    getHisLabel () {
+      let url = '/sign/qryClassList.do?idTaskInfo=' + this.id
+
+      util.ajax.get(url).then(res => {
+        if (!res.data.status) {
+          this.$Message.error(res.data.errormsg)
+        } else {
+          let data = res.data.data
+          data.map((v) => {
+            v.name = v.className
+            v.desc = v.classDesc
+          })
+          this.vectorgraphHis = data
+        }
+      })
+    },
+    addHisData (info) {
+      let f = this.vectorgraphHis.filter((v) => {
+        return v.name === info.name && v.desc === info.desc
+      })
+      if (f.length === 0) {
+        this.vectorgraphHis.push({
+          name: info.name,
+          desc: info.desc
+        })
+      }
     }
   },
   created () {
@@ -404,13 +505,13 @@ export default {
     this.setPower()
     this.formData.idTaskInfo = this.id
     this.getData()
+    this.getHisLabel()
   },
   mounted () {
 
   }
 }
 </script>
-
 <style lang="less">
     ul.vectorgraph{
         overflow: hidden;
@@ -419,7 +520,10 @@ export default {
             width: 25%;
             float: left;
             position: relative;
-
+            &>section{
+                margin: -24px 30px 0;
+                min-height: 24px;
+            }
             &>div{
                 position: relative;
                 margin: 30px;
@@ -453,6 +557,7 @@ export default {
 
                   &[status="1"]{
                     background-color: #FF8A00;
+                    display: none;
                   }
                   &[status="2"]{
                     background-color: #EF4949;
@@ -462,6 +567,11 @@ export default {
                   }
                   &[status="4"]{
                     background-color: #666666;
+                  }
+                }
+                .show{
+                  &[status="1"]{
+                    display: block;
                   }
                 }
                 .item-audit-msg{

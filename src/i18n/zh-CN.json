@@ -75,6 +75,9 @@
         }
     },
     "general": {
+        "class": "类别",
+        "train_all_batch": "本批次全部提交训练",
+        "classification_label": "分类标注",
         "label": "标记",
         "save": "保存",
         "cancel": "取消",
