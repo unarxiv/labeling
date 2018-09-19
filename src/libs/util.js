@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 let util = {
 
 }
-const ajaxUrl = 'http://120.79.213.19:8080/sign_web'
+const ajaxUrl = 'http://134.175.1.246:80/sign_web'
 
 util.ajaxUrl = ajaxUrl
 util.imgUrl = 'http://120.79.213.19:8080'
@@ -19,7 +19,6 @@ util.ajax.interceptors.request.use(function (config) {
   if (localStorage.getItem('token') !== null) {
     config.headers['AccessToken'] = localStorage.getItem('token')
   }
-
   return config
 }, function (error) {
   return Promise.reject(error)
