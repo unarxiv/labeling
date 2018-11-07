@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-let host = 'http://134.175.1.246/train/'
+let host = 'http://industryai.net/train/'
 
 function _inferenceCall (endpoint, image) {
   return new Promise((resolve, reject) => {

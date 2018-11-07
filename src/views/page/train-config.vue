@@ -40,6 +40,7 @@ export default {
     return {
       config: null,
       configList: [],
+      selected_model: '',
       save_loading: false,
       typeList: [
         {
@@ -57,7 +58,6 @@ export default {
       ],
       models: [],
       all_models: [],
-      selected_model: '',
       type: 'detector'
     }
   },
@@ -100,7 +100,6 @@ export default {
       this.filterModels()
     },
     selectModel (value) {
-
     },
     filterModels () {
       let self = this

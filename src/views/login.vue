@@ -78,6 +78,12 @@
 
             </Card>
         </div>
+        <div class="login-contrib">
+          <img src="@/assets/logo/szu.png" class="contrib-logo"/>
+          <img src="@/assets/logo/iacas.png" class="contrib-logo"/>
+          <img src="@/assets/logo/watrix.png" class="contrib-logo"/>
+          <img src="@/assets/logo/jingxinwei.png" class="contrib-logo"/>
+        </div>
         <Modal v-model="forget" :closable='false' :mask-closable=false :width="400">
             <h3 slot="header" style="color:#2D8CF0">{{ $t("tips.forgot_password") }}</h3>
             <Form ref="forgetForm" :model="forgetForm" :label-width="60" label-position="right"
@@ -359,5 +365,20 @@ export default {
         }
 
     }
+}
+.login-contrib {
+  position: absolute;
+  right: 20%;
+  top: 80%;
+  width: 60%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.contrib-logo {
+  align-self: center;
+  width: 20%;
+  margin-left: 20px;
+  min-width: 20%;
 }
 </style>

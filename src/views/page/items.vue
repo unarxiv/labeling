@@ -303,6 +303,10 @@ export default {
       this.getData()
     },
     sendTrain () {
+      console.log('sendTrain')
+      let selectedModel = this.$refs['trainConfig'].selected_model
+      console.log(this.$refs['trainConfig'].selected_model)
+      console.log(selectedModel)
       if (this.allTrain === true) {
         this.sendTrainAll()
         this.allTrain = false
@@ -322,7 +326,8 @@ export default {
         util.ajax.post('/train/startTrain.do', {
           config: config,
           signInfoIds: list,
-          trainType: type
+          trainType: type,
+          modelId: selectedModel
         }).then(res => {
           this.save_loading = false
           if (!res.data.status) {
@@ -346,13 +351,15 @@ export default {
       }
     },
     sendTrainAll () {
+      let selectedModel = this.$refs['trainConfig'].selected_model
       this.save_loading = true
       let config = this.$refs.trainConfig.config
       let type = this.$refs.trainConfig.type
       util.ajax.post('/train/startTaskTrain.do', {
         config: config,
         idTaskInfo: this.id,
-        trainType: type
+        trainType: type,
+        modelId: selectedModel
       }).then(res => {
         this.save_loading = false
         if (!res.data.status) {

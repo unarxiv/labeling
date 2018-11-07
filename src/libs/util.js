@@ -4,10 +4,10 @@ import Cookies from 'js-cookie'
 let util = {
 
 }
-const ajaxUrl = 'http://134.175.1.246:80/sign_web'
+const ajaxUrl = 'http://industryai.net/sign_web'
 
 util.ajaxUrl = ajaxUrl
-util.imgUrl = 'http://120.79.213.19:8080'
+util.imgUrl = 'http://industryai.net'
 util.ajax = axios.create({
   baseURL: ajaxUrl,
   timeout: 30000,

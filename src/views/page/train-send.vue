@@ -39,6 +39,7 @@ export default {
       let config = this.$refs.trainConfig.config
       let type = this.$refs.trainConfig.type
       this.save_loading = true
+      console.log(selectedModel)
       util.ajax.post('/train/reStartTrain.do', {
         config: config,
         idTrainInfo: this.id,
