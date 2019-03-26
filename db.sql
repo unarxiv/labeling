@@ -394,3 +394,18 @@ CREATE TABLE `sign_user_group` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2018-11-08 20:49:08
+
+DROP TABLE IF EXISTS `sign_label_delete`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sign_label_delete` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID自增长',
+  `id_task_info` int(11) DEFAULT NULL COMMENT '任务ID',
+  `label_name` varchar(30) DEFAULT NULL COMMENT '标注名称',
+  `label_desc` varchar(200) DEFAULT NULL COMMENT '标注备注',
+  `created_by` varchar(100) DEFAULT NULL COMMENT '创建人',
+  `updated_by` varchar(100) DEFAULT NULL COMMENT '更新人',
+  `created_date` datetime NOT NULL COMMENT '创建时间',
+  `updated_date` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

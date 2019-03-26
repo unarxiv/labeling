@@ -103,7 +103,16 @@ export default {
                 }
               }
             }, this.$i18n.t('table.view')))
-
+            buts.push(h('Button', {
+              props: {
+                size: 'small'
+              },
+              on: {
+                click: () => {
+                  window.open('/sign_web/sign/downSign.do?idTaskInfo=' + row.idTaskInfo)
+                }
+              }
+            }, this.$i18n.t('table.download_json')))
             return h('div', buts)
           }
         }

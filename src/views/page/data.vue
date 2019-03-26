@@ -33,6 +33,9 @@
                         remote
                         :placeholder="$t('auditing.name_or_email')"
                         :remote-method="getUserUploadMember"
+                        @on-query-change="(val) => {
+                          selectQueryChange('member', val)
+                        }"
                         :loading="loading1"
                         :label="form.uploadMemberLabel">
                         <Option v-for="(option) in uploadMember" :value="option.userId" :key="option.userId" :label="option.userName+'('+option.email+')'">{{option.userName}}({{option.email}})</Option>
@@ -48,6 +51,9 @@
                         :placeholder="$t('auditing.name_or_email')"
                         :remote-method="getUserLabelMember"
                         :loading="loading2"
+                        @on-query-change="(val) => {
+                          selectQueryChange('label', val)
+                        }"
                         :label="form.labelMemberLabel">
                         <Option v-for="(option) in labelMember" :value="option.userId" :key="option.userId" :label="option.userName+'('+option.email+')'">{{option.userName}}({{option.email}})</Option>
                     </Select>
@@ -62,6 +68,9 @@
                         :placeholder="$t('auditing.name_or_email')"
                         :remote-method="getUserAuditMember"
                         :loading="loading3"
+                        @on-query-change="(val) => {
+                          selectQueryChange('audit', val)
+                        }"
                         :label="form.auditMemberLabel">
                         <Option v-for="(option) in auditMember" :value="option.userId" :key="option.userId" :label="option.userName+'('+option.email+')'">{{option.userName}}({{option.email}})</Option>
                     </Select>
@@ -211,10 +220,22 @@ export default {
       },
       uploadMember: [],
       labelMember: [],
-      auditMember: []
+      auditMember: [],
+      cacheLabelName: '',
+      cacheMember: '',
+      cacheAudit: ''
     }
   },
   methods: {
+    selectQueryChange (type, val) {
+      if (type === 'member') {
+        this.cacheMember = val
+      } else if (type === 'audit') {
+        this.cacheAudit = val
+      } else if (type === 'label') {
+        this.cacheLabelName = val
+      }
+    },
     showAdd () {
       this.add = true
       this.addText = this.$i18n.t('auditing.create_group')
@@ -229,7 +250,25 @@ export default {
       this.add = true
       this.addText = this.$i18n.t('auditing.edit_group')
     },
+    verifyCache () {
+      let str = ''
+      if (this.cacheLabelName !== '') {
+        str = '标注人员存在未匹配用户'
+      } else if (this.cacheAudit !== '') {
+        str = '审核人员存在未匹配用户'
+      } else if (this.cacheMember !== '') {
+        str = '上传人员存在未匹配用户'
+      }
+      if (str) {
+        this.$Message.warning(str)
+      }
+      return !str
+    },
     saveAdd () {
+      let bool = this.verifyCache()
+      if (!bool) {
+        return
+      }
       this.save_loading = true
       this.$refs.addForm.validate((valid) => {
         if (valid) {

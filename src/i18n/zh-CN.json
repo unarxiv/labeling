@@ -110,7 +110,8 @@
         "operation":"操作",
         "submit_train":"提交训练",
         "train_record": "训练记录",
-        "view": "查看"
+        "view": "查看",
+        "download_json": "下载"
     },
     "auditing": {
         "data_review": "数据审核",

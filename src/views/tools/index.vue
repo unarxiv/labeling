@@ -106,6 +106,13 @@
             <Option v-for="(v,i) in vectorgraphHis" :value="i" :key="i">{{ v.name }}</Option>
           </Select>
           </FormItem>
+           <FormItem label="快选" v-if="vectorgraphHis.length != 0">
+              <RadioGroup v-model="quickList">
+                  <Radio :label="index" v-for = "(item, index) in vectorgraphHis.slice(0,3)" :key="index">
+                      <span>{{item.name}}</span>
+                  </Radio>
+              </RadioGroup>
+            </FormItem>
           <FormItem label="名称" prop="name">
               <Input v-model="formItem.name" placeholder="Enter object name" />
           </FormItem>
@@ -661,7 +668,8 @@ export default {
         signInfoId: this.id,
         labelName: attr.name,
         labelInfo: JSON.stringify(attr),
-        labelRemark: attr.desc
+        labelRemark: attr.desc,
+        idTaskInfo: this.idTaskInfo
       }).then(res => {
         if (!res.data.status) {
           this.$Message.error(res.data.errormsg)
@@ -689,6 +697,16 @@ export default {
     },
     deleteTag (attr) {
       util.ajax.post('/sign/deleteSignInfo.do', 'idLabelInfo=' + attr.idLabelInfo).then(res => {
+        if (!res.data.status) {
+          this.$Message.error(res.data.errormsg)
+        } else {
+          this.$Message.success('已删除')
+        }
+      })
+    },
+    deleteHisTag (idTaskInfo, labelName, labelRemark) {
+      var deletePostData = 'id_task_info=' + idTaskInfo + '&label_name=' + labelName + '&label_desc=' + labelRemark
+      util.ajax.post('/sign/deleteHisSignInfoDto.do', deletePostData).then(res => {
         if (!res.data.status) {
           this.$Message.error(res.data.errormsg)
         } else {
@@ -764,11 +782,22 @@ export default {
           v.checked = false
         }
       })
+      console.log(this.vectorgraphHis[i])
       _item.checked = !_item.checked
       if (_item.checked) {
-        this.$Modal.info({
+        this.$Modal.confirm({
+          closable: true,
           title: '提示',
-          content: '<p style="font-size:14px">选中该项，接下来的标注默认都用该属性,不会再弹框确认</p><p style="font-size:14px">再次点击可以取消</p>'
+          content: '<p style="font-size:14px">1、选中该项，接下来的标注默认都用该属性,不会再弹框确认,再次点击可以取消</p><p style="font-size:14px">2、点击删除按钮，可删除该标签</p>',
+          okText: '确认',
+          cancelText: '删除',
+          onCancel: () => {
+            this.deleteHisTag(this.idTaskInfo, this.vectorgraphHis[i].labelName, this.vectorgraphHis[i].labelRemark)
+            this.vectorgraphHis.splice(i, 1)
+            Draw.removeNode(this.drawEl)
+            this.drawEl = null
+            this.$refs.attrForm.resetFields()
+          }
         })
       }
       this.$forceUpdate()
@@ -1013,6 +1042,9 @@ export default {
     id () {
       this.getUpData()
       this.getDownData()
+    },
+    quickList: function () {
+      this.quickSelect(this.quickList)
     }
   },
   destroyed () {

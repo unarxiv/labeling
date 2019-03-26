@@ -110,7 +110,8 @@
         "operation":"Operate",
         "submit_train":"Submit Training",
         "train_record": "Train Record",
-        "view": "View"
+        "view": "View",
+        "download_json":"Label File"
     },
     "auditing": {
         "data_review": "Data Review",

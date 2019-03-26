@@ -70,7 +70,8 @@
                 <Upload multiple :action="uploadURL" with-credentials name="pic" :data="formData">
                         <span>{{ $t("general.multi_file_upload") }}&nbsp;&nbsp;</span>
                         <Button type="ghost" icon="ios-cloud-upload-outline">{{ $t("general.upload_file") }}</Button>
-                    </Upload>
+                        <span>&nbsp;&nbsp; * 上传压缩包只支持ZIP格式</span>
+                </Upload>
             </Form>
             <div slot="footer">
                 <Button type="primary" :loading="save_loading" @click="saveAdd">{{ $t("general.finish") }}</Button>
@@ -106,10 +107,17 @@
           <h3 slot="header" style="color:#2D8CF0">分类标注</h3>
           <Form :model="formItem" :label-width="50" :rules="rules" ref="attrForm">
             <FormItem label="快捷">
-            <Select v-model="quickList" placeholder="可以选择已标记过标签" @on-change="quickSelect">
-              <Option value="-1" disabled>可以选择已标记过标签</Option>
-              <Option v-for="(v,i) in vectorgraphHis" :value="i" :key="i">{{ v.name }}</Option>
-            </Select>
+              <Select v-model="quickList" placeholder="可以选择已标记过标签">
+                <Option value="-1" disabled>可以选择已标记过标签</Option>
+                <Option v-for="(v,i) in vectorgraphHis" :value="i" :key="i">{{ v.name }}</Option>
+              </Select>
+            </FormItem>
+            <FormItem label="快选" v-if = "vectorgraphHis.length != 0">
+              <RadioGroup v-model="quickList">
+                  <Radio :label="index" v-for = "(item, index) in vectorgraphHis.slice(0,3)" :key="index">
+                      <span>{{item.name}}</span>
+                  </Radio>
+              </RadioGroup>
             </FormItem>
             <FormItem label="名称" prop="name">
                 <Input v-model="formItem.name" placeholder="Enter object name" />
@@ -516,6 +524,11 @@ export default {
   },
   mounted () {
 
+  },
+  watch: {
+    quickList: function () {
+      this.quickSelect(this.quickList)
+    }
   }
 }
 </script>
