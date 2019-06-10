@@ -12,7 +12,9 @@ export default {
       }
     }
   },
-  getAttr (el, scale) {
+  getAttr (el, scale, changScale) {
+    changScale = changScale || 1
+    scale = scale * changScale
     let attr = el.attributes
     let _attr = {}
     let _type = el.nodeName
@@ -28,10 +30,12 @@ export default {
         _attr.y = _attr.y / scale
         _attr.width = _attr.width / scale
         _attr.height = _attr.height / scale
-        _attr['stroke-width'] = _attr['stroke-width'] / scale
+        // _attr['stroke-width'] = _attr['stroke-width'] / scale
+        _attr['stroke-width'] = 2
         break
       case 'polyline':
-        _attr['stroke-width'] = _attr['stroke-width'] / scale
+        // _attr['stroke-width'] = _attr['stroke-width'] / scale
+        _attr['stroke-width'] = 2
         _attr.points = this.fitPoints(_attr.points, scale)
         break
     }
@@ -77,8 +81,9 @@ export default {
     })
     return this.pointsToString(_ps)
   },
-  fitAttr (attr, type, scale) {
-    scale = 1 / scale
+  fitAttr (attr, type, scale, changScale) {
+    changScale = changScale || 1
+    scale = 1 / scale / changScale
     let _attr = {}
     let i
     for (i in attr) {
@@ -92,11 +97,13 @@ export default {
         _attr.y = _attr.y / scale
         _attr.width = _attr.width / scale
         _attr.height = _attr.height / scale
-        _attr['stroke-width'] = _attr['stroke-width'] / scale
+        // _attr['stroke-width'] = _attr['stroke-width'] / scale
+        _attr['stroke-width'] = 2
         break
       case 'polyline':
         _attr.points = this.fitPoints(_attr.points, scale)
-        _attr['stroke-width'] = _attr['stroke-width'] / scale
+        // _attr['stroke-width'] = _attr['stroke-width'] / scale
+        _attr['stroke-width'] = 2
         break
     }
     return _attr
@@ -134,5 +141,8 @@ export default {
     if (el && el.parentNode) {
       el.parentNode.removeChild(el)
     }
+  },
+  gap (p1, p2) {
+    return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2))
   }
 }

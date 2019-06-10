@@ -68,8 +68,10 @@
                 <canvas ref="img_canvas" width="100%" height="100%"/>
                 <svg ref="draw_canvas" width="100%" height="100%"/>
                 <svg ref="list_canvas" width="100%" height="100%"/>
+                <edit-svg ref="edit_canvas" v-show="editVector" @on-cancel="editVectorCancel" @on-save="editVectorSave"></edit-svg>
               </section>
               <Spin size="large" fix v-show="loadingImage"></Spin>
+              <contextmenu :left="left" :top="top" v-model="contexmenuFlag" :vector="contexmenuVector" @click-menu="clickContexmenu"></contextmenu>
             </Content>
             <Sider :style="{background: '#f5f7f9'}" >
               <div class="tag-box">
@@ -141,6 +143,8 @@
 <script>
 import Draw from './draw'
 import util from '../../libs/util'
+import contextmenu from './plug/contextmenu'
+import editSvg from './plug/editSvg'
 export default {
   name: 'tools',
   data () {
@@ -208,7 +212,12 @@ export default {
       quickList: '',
       cacheImgs: {},
       preImg: null,
-      nextImg: null
+      nextImg: null,
+      top: 0,
+      left: 0,
+      contexmenuFlag: false,
+      contexmenuVector: null,
+      editVector: false
     }
   },
   methods: {
@@ -232,6 +241,7 @@ export default {
       this.draw = false
     },
     drawStart (e) {
+      if (this.editVector) return
       if (!this.start) return
       this.draw = true
       this.end = false
@@ -270,6 +280,7 @@ export default {
       this.$refs.draw_canvas.appendChild(this.startDot)
     },
     drawMove (e) {
+      if (this.editVector) return
       if (!this.draw && this.type !== 2) return
       if (this.type === 1) {
         this.drawRect(this.drawEl, e)
@@ -283,6 +294,9 @@ export default {
           this.drawPoly(this.drawEl, points)
         }
       } else if (this.type === 3) {
+        // this.timespan = this.timespan || (new Date()).getTime()
+        this.range = this.range || this.startOffset
+
         if (this.points.length > 1 && Math.abs(this.points[0].x - e.offsetX) <= 4 && Math.abs(this.points[0].y - e.offsetY) <= 4) {
           this.points.push({
             x: this.points[0].x,
@@ -290,10 +304,22 @@ export default {
           })
           this.end = true
         } else {
-          this.points.push({
+          // if ((new Date()).getTime() - this.timespan > 50) {
+          let gap = Draw.gap(this.range, {
             x: e.offsetX,
             y: e.offsetY
           })
+          if (gap > 5) {
+            this.points.push({
+              x: e.offsetX,
+              y: e.offsetY
+            })
+            this.range = {
+              x: e.offsetX,
+              y: e.offsetY
+            }
+            // this.timespan = (new Date()).getTime()
+          }
         }
         if (this.points.length > 0) {
           this.drawPoly(this.drawEl)
@@ -301,6 +327,7 @@ export default {
       }
     },
     drawEnd (e) {
+      if (this.editVector) return
       if (!this.start) return
       switch (this.type) {
         case 1:
@@ -366,7 +393,7 @@ export default {
         'width': Math.abs(this.startOffset.x - e.offsetX),
         'height': Math.abs(this.startOffset.y - e.offsetY),
         'stroke': this.color,
-        'stroke-width': 4 * this.scale,
+        'stroke-width': 2,
         'fill': 'none',
         'stroke-linecap': 'round'
         // 'style': 'fill: ' + this.color + ';stroke:' + this.color + ';stroke-width:4;fill-opacity:0;stroke-opacity:0.9'
@@ -378,7 +405,7 @@ export default {
         Draw.setAttr(el, {
           'points': Draw.pointsToString(points),
           'stroke': this.color,
-          'stroke-width': 4 * this.scale,
+          'stroke-width': 2,
           'fill': 'none',
           'stroke-linecap': 'round'
         })
@@ -431,6 +458,7 @@ export default {
       this.$refs.list_canvas.setAttribute('height', this.availHeight)
     },
     loadImage () {
+      this.editVector = false
       let img = new Image()
       this.loadingImage = true
       img.onload = () => {
@@ -456,24 +484,28 @@ export default {
       }
     },
     resize () {
+      this.changScale = 1
       this.loadImage()
     },
-    addVector () {
+    addVector (noclear) {
       let svg = this.$refs.list_canvas
       // svg.innerHTML = ''
-      while (svg.childNodes.length > 0) {
-        svg.removeChild(svg.firstChild)
+      if (!noclear) {
+        while (svg.childNodes.length > 0) {
+          svg.removeChild(svg.firstChild)
+        }
       }
+
       this.vectorgraph.forEach(v => {
-        let vector = Draw.vector(v.type)
+        let vector = v.el && v.el.nodeName ? v.el : Draw.vector(v.type)
         v.el = vector
-        Draw.setAttr(vector, Draw.fitAttr(v.attr, v.type, this.scale))
+        Draw.setAttr(vector, Draw.fitAttr(v.attr, v.type, this.scale, this.changScale))
         this.addVectorEvent(vector)
         svg.appendChild(vector)
       })
     },
     addVectorEvent (el) {
-      el.addEventListener('mouseover', (e) => {
+      el.addEventListener && el.addEventListener('mouseover', (e) => {
         e.preventDefault()
         // e.target.style = 'fill:red;stroke-width:' + this.scale * 6 + ';fill-opacity:0.3;stroke-opacity:0.9'
         e.target.setAttribute('style', 'fill:red;stroke-width:' + this.scale * 6 + ';fill-opacity:0.3;stroke-opacity:0.9')
@@ -483,35 +515,77 @@ export default {
         })
         this.hoverIndex = target.length > 0 ? target[0].idLabelInfo : ''
       }, false)
-      el.addEventListener('mouseout', (e) => {
+      el.addEventListener && el.addEventListener('mouseout', (e) => {
         e.preventDefault()
         // e.target.style = ''
         e.target.setAttribute('style', '')
         this.start = true
         this.hoverIndex = ''
       }, false)
-      el.addEventListener('click', (e) => {
+      el.addEventListener && el.addEventListener('click', (e) => {
         e.preventDefault()
-        if (this.end === false) {
+        // if (this.end === false) {
 
-        } else {
-          this.attrInput = true
-          let vector = e.target
-          this.$nextTick(() => {
-            this.vectorClick(vector)
-          })
-        }
+        // } else {
+        //   this.attrInput = true
+        //   let vector = e.target
+        //   this.$nextTick(() => {
+        //     this.vectorClick(vector)
+        //   })
+        // }
       }, false)
+      el.addEventListener('contextmenu', (e) => {
+        e.preventDefault()
+        this.contexmenuFlag = true
+        this.left = e.offsetX
+        this.top = e.offsetY
+        this.contexmenuVector = e.target
+      })
     },
     setScale (t) {
-      let scaleStr = this.$refs.section.style.transform.replace(/scale\(([0-9.]+)\)/g, '$1')
-      let scale = scaleStr.length === 0 ? 1 : Number(scaleStr)
+      // let scaleStr = this.$refs.section.style.transform.replace(/scale\(([0-9.]+)\)/g, '$1')
+      // let scale = scaleStr.length === 0 ? 1 : Number(scaleStr)
+      // switch (t) {
+      //   case 0:scale = 1; break
+      //   case 1:scale += 0.1; break
+      //   case -1:scale -= 0.1; break
+      // }
+      // this.$refs.section.style.transform = 'scale(' + scale + ')'
+
+      let scale = this.changScale || 1
       switch (t) {
         case 0:scale = 1; break
         case 1:scale += 0.1; break
         case -1:scale -= 0.1; break
       }
-      this.$refs.section.style.transform = 'scale(' + scale + ')'
+      let width = this.availWidth * scale
+      let height = this.availHeight * scale
+      this.$refs.section.style.width = width + 'px'
+      this.$refs.section.style.height = height + 'px'
+      this.$refs.img_canvas.width = width
+      this.$refs.img_canvas.height = height
+      this.$refs.draw_canvas.setAttribute('width', width)
+      this.$refs.draw_canvas.setAttribute('height', height)
+      this.$refs.list_canvas.setAttribute('width', width)
+      this.$refs.list_canvas.setAttribute('height', height)
+      this.changScale = scale
+
+      let img = new Image()
+      img.onload = () => {
+        let ctx = this.$refs.img_canvas.getContext('2d')
+
+        ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height)
+        this.addVector(1)
+        if (this.editVectorSvg) {
+          this.$refs.edit_canvas.edit(this.editVectorSvg)
+        }
+      }
+      // img.src = this.imgUrls[this.page];
+      if (this.cacheImgs[this.fileSrc]) {
+        img.src = this.cacheImgs[this.fileSrc].src
+      } else {
+        img.src = this.fileSrc
+      }
     },
     vectorClick (vector) {
       this.drawEl = vector
@@ -1018,7 +1092,56 @@ export default {
       } else {
         return true
       }
+    },
+    clickContexmenu (item, vector) {
+      switch (item.value) {
+        case '1':
+          this.editVectorHandler(vector)
+          break
+        case '2':
+          if (this.end === false) {
+
+          } else {
+            this.attrInput = true
+            this.$nextTick(() => {
+              this.vectorClick(vector)
+            })
+          }
+          break
+      }
+    },
+    editVectorHandler (vector) {
+      this.editVector = true
+      this.editVectorSvg = vector
+      this.$refs.edit_canvas.edit(vector)
+    },
+    editVectorCancel () {
+      this.editVector = false
+    },
+    editVectorSave (vector) {
+      this.editVector = false
+      this.drawEl = vector
+      let attr = Draw.getAttr(this.drawEl, this.scale, this.changScale)
+      attr.el = this.drawEl
+      let index = 0
+      let f = this.vectorgraph.filter((v, i) => {
+        if (v.el === this.drawEl) {
+          index = i
+          return true
+        }
+      })
+      if (f.length > 0) {
+        attr.idLabelInfo = this.vectorgraph[index].idLabelInfo
+        attr.name = this.vectorgraph[index].name
+        attr.desc = this.vectorgraph[index].desc
+        attr.tool = this.vectorgraph[index].type
+        this.vectorgraph[index] = attr
+        this.updateTag(attr)
+      }
+
+      this.drawEl = null
     }
+
   },
   created () {
     this.id = this.$route.params.id
@@ -1052,6 +1175,10 @@ export default {
     document.removeEventListener('resize', this.resize, false)
     document.removeEventListener('keydown', this.keydown, false)
     document.removeEventListener('keyup', this.keyup, false)
+  },
+  components: {
+    contextmenu,
+    editSvg
   }
 }
 </script>
