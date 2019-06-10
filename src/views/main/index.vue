@@ -4,7 +4,7 @@
             <Header>
                 <top-menu></top-menu>
             </Header>
-            <Layout class="layout-content">
+            <Layout class="layout-content page-content" ref="page-content">
                 <Sider collapsible :collapsed-width="78" v-model="isCollapsed">
                     <left-menu :isCollapsed="isCollapsed"></left-menu>
                 </Sider>
@@ -34,6 +34,9 @@ export default {
       isCollapsed: false
 
     }
+  },
+  mounted () {
+    this.$refs['page-content'].$el.style.height = (document.documentElement.offsetHeight - 64) + 'px'
   }
 }
 </script>
@@ -45,8 +48,7 @@ export default {
     overflow: hidden;
     position: absolute;
     width: 100%;
-    height: 100%;
-
+    height: 100vh;
     .ivu-layout-header{
         padding: 0;
 
